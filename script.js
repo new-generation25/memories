@@ -228,6 +228,17 @@ function saveProgress(progress) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
+// 전체 진행 상황 초기화
+function resetAllProgress() {
+    if (!confirm('모든 진행 상황을 초기화하시겠습니까?\n(완료한 미션과 보너스 미션이 모두 삭제됩니다)')) {
+        return;
+    }
+    
+    localStorage.removeItem(STORAGE_KEY);
+    alert('진행 상황이 초기화되었습니다!');
+    location.reload();
+}
+
 // 진행률 업데이트
 function updateProgressBar() {
     const progress = loadProgress();
@@ -534,6 +545,19 @@ function loadBonus(bonus) {
     
     const progress = loadProgress();
     if (progress.bonusCompleted.includes(currentMissionId)) {
+        // 주관식 형식인 경우 다시 풀 수 있도록 "다시 풀기" 버튼 제공
+        if (bonus.type === "text") {
+            quizBox.innerHTML = `
+                <div class="quiz-result correct">
+                    ✓ 보너스 미션 완료!
+                </div>
+                <button onclick="resetBonusMission()" class="quiz-reset-btn" style="margin-top: 10px; padding: 8px 15px; background: #D4722B; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                    다시 풀기
+                </button>
+            `;
+            return;
+        }
+        // 선택형은 완료 상태 유지
         quizBox.innerHTML = `
             <div class="quiz-result correct">
                 ✓ 보너스 미션 완료!
@@ -677,6 +701,24 @@ function selectOption(index) {
             </div>
         `;
     }
+}
+
+// 보너스 미션 초기화
+function resetBonusMission() {
+    if (!confirm('보너스 미션을 다시 풀겠습니까?')) {
+        return;
+    }
+    
+    const progress = loadProgress();
+    const index = progress.bonusCompleted.indexOf(currentMissionId);
+    if (index > -1) {
+        progress.bonusCompleted.splice(index, 1);
+        saveProgress(progress);
+    }
+    
+    // 보너스 퀴즈 다시 로드
+    const mission = missionsData[currentMissionId];
+    loadBonus(mission.bonus);
 }
 
 // 미션 완료
