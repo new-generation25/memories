@@ -327,24 +327,17 @@ function submitCode() {
 
 // 코드 검증
 function validateCode(code) {
-    // URL인 경우 처리
+    console.log('스캔된 코드:', code);
+    
+    // URL에서 ID 추출 시도 (정규식 사용)
     if (code.includes('mission.html') || code.includes('http')) {
-        try {
-            // 전체 URL인 경우 ID 추출해서 이동
-            const url = new URL(code);
-            const id = url.searchParams.get('id');
-            if (id && missionsData[id]) {
+        const idMatch = code.match(/[?&]id=(\d+)/);
+        if (idMatch) {
+            const id = idMatch[1];
+            console.log('추출된 ID:', id);
+            if (missionsData[id]) {
                 window.location.href = `mission.html?id=${id}`;
                 return;
-            }
-        } catch (e) {
-            // URL 파싱 실패 시 상대 경로일 수 있음
-            if (code.includes('mission.html?id=')) {
-                const idMatch = code.match(/id=(\d+)/);
-                if (idMatch && missionsData[idMatch[1]]) {
-                    window.location.href = `mission.html?id=${idMatch[1]}`;
-                    return;
-                }
             }
         }
     }
@@ -362,7 +355,8 @@ function validateCode(code) {
         // 미션 페이지로 이동
         window.location.href = `mission.html?id=${foundMission}`;
     } else {
-        alert('올바른 QR 코드가 아닙니다!');
+        console.error('인식 실패. 코드:', code);
+        alert('올바른 QR 코드가 아닙니다!\n스캔된 값: ' + code);
     }
 }
 
