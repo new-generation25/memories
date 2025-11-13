@@ -780,9 +780,22 @@ function formatAnswerHint(answer) {
 
 // 정답 비교 함수 (띄어쓰기 무시, 대소문자 구분 없이)
 function compareAnswers(userAnswer, correctAnswer) {
-    // 띄어쓰기 제거하고 소문자로 변환하여 비교
-    const normalizedUser = userAnswer.replace(/\s+/g, '').toLowerCase().trim();
-    const normalizedCorrect = correctAnswer.replace(/\s+/g, '').toLowerCase().trim();
+    if (!userAnswer || !correctAnswer) {
+        return false;
+    }
+    
+    // 띄어쓰기와 특수문자 제거하고 소문자로 변환하여 비교
+    const normalizedUser = userAnswer.replace(/\s+/g, '').replace(/[^\w가-힣]/g, '').toLowerCase().trim();
+    const normalizedCorrect = correctAnswer.replace(/\s+/g, '').replace(/[^\w가-힣]/g, '').toLowerCase().trim();
+    
+    console.log('정답 비교:', {
+        사용자입력: userAnswer,
+        정답: correctAnswer,
+        정규화된사용자입력: normalizedUser,
+        정규화된정답: normalizedCorrect,
+        일치: normalizedUser === normalizedCorrect
+    });
+    
     return normalizedUser === normalizedCorrect;
 }
 
