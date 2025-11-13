@@ -519,6 +519,8 @@ function loadMissionData(id) {
             // Enter 키로 제출 가능하도록 (이벤트 리스너는 한 번만 추가)
             const missionAnswerInput = document.getElementById('missionAnswer');
             missionAnswerInput.value = ''; // 초기화
+            // placeholder에 힌트 표시 (예: "ㅇㅇㅇ ㅇㅇ")
+            missionAnswerInput.placeholder = formatAnswerHint(mission.missionAnswer);
             missionAnswerInput.onkeypress = function(e) {
                 if (e.key === 'Enter') {
                     submitMissionAnswer();
@@ -611,10 +613,12 @@ function loadBonus(bonus) {
     
     // 주관식 입력 형식인 경우
     if (bonus.type === "text") {
+        // placeholder에 힌트 표시 (예: "ㅇㅇㅇ ㅇㅇ")
+        const answerHint = formatAnswerHint(bonus.answer);
         let html = `
             <div class="quiz-question">${bonus.question}</div>
             <div class="quiz-text-input">
-                <input type="text" id="quizTextAnswer" placeholder="정답을 입력하세요" class="quiz-input">
+                <input type="text" id="quizTextAnswer" placeholder="${answerHint}" class="quiz-input">
                 <button onclick="submitTextAnswer()" class="quiz-submit-btn">제출</button>
             </div>
             <div id="quizResult"></div>
@@ -657,7 +661,7 @@ function submitTextAnswer() {
     const mission = missionsData[currentMissionId];
     const input = document.getElementById('quizTextAnswer');
     const userAnswer = input.value.trim();
-    const correctAnswer = mission.bonus.answer.toLowerCase().trim();
+    const correctAnswer = mission.bonus.answer;
     const resultDiv = document.getElementById('quizResult');
     
     if (!userAnswer) {
@@ -672,8 +676,8 @@ function submitTextAnswer() {
         submitBtn.disabled = true;
     }
     
-    // 정답 체크 (대소문자 구분 없이)
-    if (userAnswer.toLowerCase().trim() === correctAnswer) {
+    // 정답 체크 (띄어쓰기 무시, 대소문자 구분 없이)
+    if (compareAnswers(userAnswer, correctAnswer)) {
         input.classList.add('correct');
         resultDiv.innerHTML = `
             <div class="quiz-result correct">
@@ -691,7 +695,7 @@ function submitTextAnswer() {
         input.classList.add('wrong');
         resultDiv.innerHTML = `
             <div class="quiz-result wrong">
-                ❌ 아쉽습니다. 정답은 "${mission.bonus.answer}"입니다.
+                ❌ 아쉽습니다. 정답은 "${mission.bonus.answer}"입니다. 다시 시도해보세요.
             </div>
         `;
         
@@ -764,12 +768,29 @@ function resetBonusMission() {
     loadBonus(mission.bonus);
 }
 
+// 정답을 placeholder 형식으로 변환 (예: "인디언 추장" -> "ㅇㅇㅇ ㅇㅇ")
+function formatAnswerHint(answer) {
+    if (!answer) return "정답을 입력하세요";
+    
+    // 단어별로 분리하여 각 단어를 ㅇ으로 변환
+    const words = answer.split(/\s+/);
+    return words.map(word => 'ㅇ'.repeat(word.length)).join(' ');
+}
+
+// 정답 비교 함수 (띄어쓰기 무시, 대소문자 구분 없이)
+function compareAnswers(userAnswer, correctAnswer) {
+    // 띄어쓰기 제거하고 소문자로 변환하여 비교
+    const normalizedUser = userAnswer.replace(/\s+/g, '').toLowerCase().trim();
+    const normalizedCorrect = correctAnswer.replace(/\s+/g, '').toLowerCase().trim();
+    return normalizedUser === normalizedCorrect;
+}
+
 // 메인 미션 정답 제출
 function submitMissionAnswer() {
     const mission = missionsData[currentMissionId];
     const input = document.getElementById('missionAnswer');
     const userAnswer = input.value.trim();
-    const correctAnswer = mission.missionAnswer.toLowerCase().trim();
+    const correctAnswer = mission.missionAnswer;
     const resultDiv = document.getElementById('missionResult');
     
     if (!userAnswer) {
@@ -784,8 +805,8 @@ function submitMissionAnswer() {
         submitBtn.disabled = true;
     }
     
-    // 정답 체크 (대소문자 구분 없이)
-    if (userAnswer.toLowerCase().trim() === correctAnswer) {
+    // 정답 체크 (띄어쓰기 무시, 대소문자 구분 없이)
+    if (compareAnswers(userAnswer, correctAnswer)) {
         input.classList.add('correct');
         resultDiv.innerHTML = `
             <div class="quiz-result correct">
@@ -822,7 +843,7 @@ function submitMissionAnswer() {
         input.classList.add('wrong');
         resultDiv.innerHTML = `
             <div class="quiz-result wrong">
-                ❌ 아쉽습니다. 정답이 아닙니다. 다시 시도해보세요.
+                ❌ 아쉽습니다. 정답은 "${mission.missionAnswer}"입니다. 다시 시도해보세요.
             </div>
         `;
         
