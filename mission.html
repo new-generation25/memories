@@ -36,7 +36,15 @@
         <section class="mission-info">
             <h3>🎯 미션</h3>
             <p id="missionDesc"></p>
-            <button class="btn-complete" id="completeBtn" onclick="completeMission()">
+            <div id="missionQuizBox" style="display: none; background: #FFF8DC; border-radius: 15px; padding: 20px; margin-top: 15px;">
+                <div class="quiz-question" id="missionQuestion"></div>
+                <div class="quiz-text-input">
+                    <input type="text" id="missionAnswer" placeholder="정답을 입력하세요" class="quiz-input">
+                    <button onclick="submitMissionAnswer()" class="quiz-submit-btn">제출</button>
+                </div>
+                <div id="missionResult"></div>
+            </div>
+            <button class="btn-complete" id="completeBtn" onclick="completeMission()" style="display: none;">
                 ✓ 미션 완료
             </button>
         </section>

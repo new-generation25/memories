@@ -34,6 +34,8 @@ const missionsData = {
 
 그 안에 비밀이 숨어있답니다.`,
         mission: "카페 밖에서 풍선초 씨앗이 어떤 모양인지 확인하세요.",
+        missionQuestion: "풍선초 씨앗은 어떤 모양일까요?", // 메인 미션 질문
+        missionAnswer: "하트", // 메인 미션 정답
         bonus: {
             type: "text", // 주관식 입력 형식
             question: "풍선초 씨앗은 어떤 모양일까요?",
@@ -495,6 +497,44 @@ function loadMissionData(id) {
     // 미션 설명
     document.getElementById('missionDesc').textContent = mission.mission;
     
+    // 메인 미션 퀴즈 (정답이 있는 경우)
+    const progress = loadProgress();
+    const missionQuizBox = document.getElementById('missionQuizBox');
+    const completeBtn = document.getElementById('completeBtn');
+    
+    if (mission.missionQuestion && mission.missionAnswer) {
+        // 메인 미션이 주관식 입력 형식인 경우
+        if (progress.completed.includes(currentMissionId)) {
+            // 이미 완료된 경우
+            missionQuizBox.style.display = 'none';
+            completeBtn.style.display = 'block';
+            completeBtn.textContent = '✓ 완료됨';
+            completeBtn.disabled = true;
+        } else {
+            // 미완료인 경우 입력 필드 표시
+            missionQuizBox.style.display = 'block';
+            completeBtn.style.display = 'none';
+            document.getElementById('missionQuestion').textContent = mission.missionQuestion;
+            
+            // Enter 키로 제출 가능하도록 (이벤트 리스너는 한 번만 추가)
+            const missionAnswerInput = document.getElementById('missionAnswer');
+            missionAnswerInput.value = ''; // 초기화
+            missionAnswerInput.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    submitMissionAnswer();
+                }
+            };
+        }
+    } else {
+        // 메인 미션이 일반 미션인 경우 (기존 방식)
+        missionQuizBox.style.display = 'none';
+        completeBtn.style.display = 'block';
+        if (progress.completed.includes(currentMissionId)) {
+            completeBtn.textContent = '✓ 완료됨';
+            completeBtn.disabled = true;
+        }
+    }
+    
     // 보너스 퀴즈 (보너스가 있는 경우에만)
     const bonusSection = document.getElementById('bonusSection');
     if (mission.bonus) {
@@ -502,13 +542,6 @@ function loadMissionData(id) {
         loadBonus(mission.bonus);
     } else {
         bonusSection.style.display = 'none';
-    }
-    
-    // 완료 버튼 상태
-    const progress = loadProgress();
-    if (progress.completed.includes(currentMissionId)) {
-        document.getElementById('completeBtn').textContent = '✓ 완료됨';
-        document.getElementById('completeBtn').disabled = true;
     }
 }
 
@@ -731,17 +764,88 @@ function resetBonusMission() {
     loadBonus(mission.bonus);
 }
 
-// 미션 완료
+// 메인 미션 정답 제출
+function submitMissionAnswer() {
+    const mission = missionsData[currentMissionId];
+    const input = document.getElementById('missionAnswer');
+    const userAnswer = input.value.trim();
+    const correctAnswer = mission.missionAnswer.toLowerCase().trim();
+    const resultDiv = document.getElementById('missionResult');
+    
+    if (!userAnswer) {
+        alert('정답을 입력해주세요!');
+        return;
+    }
+    
+    // 입력 필드와 버튼 비활성화
+    input.disabled = true;
+    const submitBtn = document.querySelector('#missionQuizBox .quiz-submit-btn');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+    }
+    
+    // 정답 체크 (대소문자 구분 없이)
+    if (userAnswer.toLowerCase().trim() === correctAnswer) {
+        input.classList.add('correct');
+        resultDiv.innerHTML = `
+            <div class="quiz-result correct">
+                🎉 정답입니다! 미션이 완료되었습니다!
+            </div>
+        `;
+        
+        // 미션 완료 처리
+        const progress = loadProgress();
+        if (!progress.completed.includes(currentMissionId)) {
+            progress.completed.push(currentMissionId);
+            progress.currentMission = currentMissionId + 1;
+            saveProgress(progress);
+        }
+        
+        // 완료 버튼 표시
+        setTimeout(() => {
+            document.getElementById('missionQuizBox').style.display = 'none';
+            const completeBtn = document.getElementById('completeBtn');
+            completeBtn.style.display = 'block';
+            completeBtn.textContent = '✓ 완료됨';
+            completeBtn.disabled = true;
+            
+            // 다음 미션 안내
+            if (currentMissionId < 5) {
+                document.getElementById('nextMission').style.display = 'block';
+            } else {
+                // 마지막 미션 완료
+                alert('🎉 모든 미션을 완료하셨습니다!\n방하림에서 완주 선물을 받아가세요.');
+                goToHome();
+            }
+        }, 1500);
+    } else {
+        input.classList.add('wrong');
+        resultDiv.innerHTML = `
+            <div class="quiz-result wrong">
+                ❌ 아쉽습니다. 정답이 아닙니다. 다시 시도해보세요.
+            </div>
+        `;
+        
+        // 틀렸을 때 입력 필드 다시 활성화 (재시도 가능)
+        setTimeout(() => {
+            input.disabled = false;
+            input.classList.remove('wrong');
+            input.value = '';
+            input.focus();
+            if (submitBtn) {
+                submitBtn.disabled = false;
+            }
+            resultDiv.innerHTML = '';
+        }, 2000);
+    }
+}
+
+// 미션 완료 (일반 미션용 - 정답이 없는 경우)
 function completeMission() {
     const progress = loadProgress();
     
     if (progress.completed.includes(currentMissionId)) {
         alert('이미 완료한 미션입니다!');
-        return;
-    }
-    
-    // 완료 확인
-    if (!confirm('미션을 완료하셨나요?')) {
         return;
     }
     
