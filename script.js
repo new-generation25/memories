@@ -27,7 +27,7 @@ const missionsData = {
 여기 봉황1935, 37년 전엔 '봉황다방'이었대요.
 아버지가 엄마에게 고백한 장소죠.
 
-풍선초를 들고 "이게 내 마음이오"라고 하셨대요.
+이것을 들고 "이게 내 마음이오"라고 하셨대요.
 
 풍선초 씨앗을 찾아보세요.
 그 안에 비밀이 숨어있답니다.`,
@@ -304,7 +304,13 @@ function onScanSuccess(decodedText) {
     if (!isScanning) return; // 중복 호출 방지
     
     isScanning = false;
-    console.log('QR 스캔 성공:', decodedText);
+    console.log('=== QR 스캔 성공 ===');
+    console.log('원본:', decodedText);
+    console.log('타입:', typeof decodedText);
+    console.log('길이:', decodedText ? decodedText.length : 0);
+    
+    // 긴급 디버깅: 화면에 바로 표시
+    alert('QR 스캔됨!\n\n값: ' + decodedText + '\n\n타입: ' + typeof decodedText + '\n\n길이: ' + (decodedText ? decodedText.length : 0));
     
     // 스캐너를 먼저 정지
     if (html5QrCode) {
