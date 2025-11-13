@@ -38,8 +38,8 @@ const missionsData = {
         missionAnswer: "하트", // 메인 미션 정답
         bonus: {
             type: "text", // 주관식 입력 형식
-            question: "풍선초 씨앗은 어떤 모양일까요?",
-            answer: "하트" // 정답
+            question: "봉황 1935 카페 안에는 피아노가 있습니다. 피아노 위에는 누가 쓰는 모자가 있습니다. 누가 쓰는 모자일까요?",
+            answer: "인디언 추장" // 정답
         }
     },
     2: {
