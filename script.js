@@ -327,36 +327,41 @@ function submitCode() {
 
 // 코드 검증
 function validateCode(code) {
+    // 공백 및 개행 문자 제거
+    code = code.trim();
     console.log('스캔된 코드:', code);
+    console.log('코드 길이:', code.length);
     
-    // URL에서 ID 추출 시도 (정규식 사용)
-    if (code.includes('mission.html') || code.includes('http')) {
-        const idMatch = code.match(/[?&]id=(\d+)/);
-        if (idMatch) {
-            const id = idMatch[1];
-            console.log('추출된 ID:', id);
-            if (missionsData[id]) {
-                window.location.href = `mission.html?id=${id}`;
-                return;
-            }
+    // URL에서 ID 추출 시도 (정규식 사용 - 대소문자 구분 없이)
+    const idMatch = code.match(/[?&]id=(\d+)/i);
+    if (idMatch) {
+        const id = idMatch[1];
+        console.log('추출된 ID:', id);
+        if (missionsData[id]) {
+            console.log('미션 페이지로 이동:', id);
+            window.location.href = `mission.html?id=${id}`;
+            return;
         }
     }
     
     // 미션 데이터에서 코드 찾기 (BH001 형식)
     let foundMission = null;
+    const upperCode = code.toUpperCase();
     for (let id in missionsData) {
-        if (missionsData[id].code === code.toUpperCase()) {
+        if (missionsData[id].code === upperCode) {
             foundMission = id;
             break;
         }
     }
     
     if (foundMission) {
-        // 미션 페이지로 이동
+        console.log('코드로 미션 찾음:', foundMission);
         window.location.href = `mission.html?id=${foundMission}`;
     } else {
         console.error('인식 실패. 코드:', code);
-        alert('올바른 QR 코드가 아닙니다!\n스캔된 값: ' + code);
+        console.error('코드 타입:', typeof code);
+        console.error('코드 바이트:', Array.from(code).map(c => c.charCodeAt(0)));
+        alert('올바른 QR 코드가 아닙니다!\n\n스캔된 값:\n' + code + '\n\n길이: ' + code.length);
     }
 }
 
