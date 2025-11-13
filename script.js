@@ -844,7 +844,7 @@ function submitMissionAnswer() {
         input.classList.add('wrong');
         resultDiv.innerHTML = `
             <div class="quiz-result wrong">
-                ❌ 아쉽습니다. 정답은 "${mission.missionAnswer}"입니다. 다시 시도해보세요.
+                ❌ 정답이 아닙니다. 다시 시도해보세요.
             </div>
         `;
         
@@ -857,7 +857,7 @@ function submitMissionAnswer() {
             if (submitBtn) {
                 submitBtn.disabled = false;
             }
-            resultDiv.innerHTML = '';
+            resultDiv.innerHTML = ''; // 오류 메시지 제거
         }, 2000);
     }
 }
