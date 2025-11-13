@@ -33,16 +33,11 @@ const missionsData = {
 빵빵하게 부풀려진 이것, 안에는 그당시 아버지의 마음이 담겨 있었데요.
 
 그 안에 비밀이 숨어있답니다.`,
-        mission: "카페 바에서 풍선초 씨앗을 찾아 하트 모양을 확인하세요.",
+        mission: "카페 밖에서 풍선초 씨앗이 어떤 모양인지 확인하세요.",
         bonus: {
-            question: "풍선초의 꽃말은 무엇일까요?",
-            options: [
-                "행운과 번영",
-                "영원한 사랑과 추억",
-                "우정과 신뢰",
-                "감사와 존경"
-            ],
-            answer: 1
+            type: "text", // 주관식 입력 형식
+            question: "풍선초 씨앗은 어떤 모양일까요?",
+            answer: "하트" // 정답
         }
     },
     2: {
@@ -547,6 +542,28 @@ function loadBonus(bonus) {
         return;
     }
     
+    // 주관식 입력 형식인 경우
+    if (bonus.type === "text") {
+        let html = `
+            <div class="quiz-question">${bonus.question}</div>
+            <div class="quiz-text-input">
+                <input type="text" id="quizTextAnswer" placeholder="정답을 입력하세요" class="quiz-input">
+                <button onclick="submitTextAnswer()" class="quiz-submit-btn">제출</button>
+            </div>
+            <div id="quizResult"></div>
+        `;
+        quizBox.innerHTML = html;
+        
+        // Enter 키로 제출 가능하도록
+        document.getElementById('quizTextAnswer').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitTextAnswer();
+            }
+        });
+        return;
+    }
+    
+    // 선택형 퀴즈 (기존 방식)
     let html = `
         <div class="quiz-question">${bonus.question}</div>
         <div class="quiz-options">
@@ -568,7 +585,63 @@ function loadBonus(bonus) {
     quizBox.innerHTML = html;
 }
 
-// 퀴즈 선택
+// 주관식 답변 제출
+function submitTextAnswer() {
+    const mission = missionsData[currentMissionId];
+    const input = document.getElementById('quizTextAnswer');
+    const userAnswer = input.value.trim();
+    const correctAnswer = mission.bonus.answer.toLowerCase().trim();
+    const resultDiv = document.getElementById('quizResult');
+    
+    if (!userAnswer) {
+        alert('정답을 입력해주세요!');
+        return;
+    }
+    
+    // 입력 필드와 버튼 비활성화
+    input.disabled = true;
+    const submitBtn = document.querySelector('.quiz-submit-btn');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+    }
+    
+    // 정답 체크 (대소문자 구분 없이)
+    if (userAnswer.toLowerCase().trim() === correctAnswer) {
+        input.classList.add('correct');
+        resultDiv.innerHTML = `
+            <div class="quiz-result correct">
+                🎉 정답입니다! 보너스 포인트 획득!
+            </div>
+        `;
+        
+        // 보너스 완료 저장
+        const progress = loadProgress();
+        if (!progress.bonusCompleted.includes(currentMissionId)) {
+            progress.bonusCompleted.push(currentMissionId);
+            saveProgress(progress);
+        }
+    } else {
+        input.classList.add('wrong');
+        resultDiv.innerHTML = `
+            <div class="quiz-result wrong">
+                ❌ 아쉽습니다. 정답은 "${mission.bonus.answer}"입니다.
+            </div>
+        `;
+        
+        // 틀렸을 때 입력 필드 다시 활성화 (재시도 가능)
+        setTimeout(() => {
+            input.disabled = false;
+            input.classList.remove('wrong');
+            input.value = '';
+            input.focus();
+            if (submitBtn) {
+                submitBtn.disabled = false;
+            }
+        }, 2000);
+    }
+}
+
+// 퀴즈 선택 (선택형)
 function selectOption(index) {
     const mission = missionsData[currentMissionId];
     const options = document.querySelectorAll('.quiz-option');

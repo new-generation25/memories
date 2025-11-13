@@ -515,6 +515,67 @@ h1 {
     color: #f44336;
 }
 
+/* 주관식 입력 필드 */
+.quiz-text-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.quiz-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.quiz-input:focus {
+    outline: none;
+    border-color: #FFD700;
+    background: #FFFACD;
+}
+
+.quiz-input.correct {
+    border-color: #4CAF50;
+    background: #E8F5E9;
+}
+
+.quiz-input.wrong {
+    border-color: #f44336;
+    background: #FFEBEE;
+}
+
+.quiz-input:disabled {
+    background: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.quiz-submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #D4722B;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.quiz-submit-btn:hover:not(:disabled) {
+    background: #C5611A;
+}
+
+.quiz-submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
 /* 다음 미션 */
 .next-mission {
     padding: 30px 20px;
