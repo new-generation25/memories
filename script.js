@@ -495,8 +495,14 @@ function loadMissionData(id) {
     // 미션 설명
     document.getElementById('missionDesc').textContent = mission.mission;
     
-    // 보너스 퀴즈
-    loadBonus(mission.bonus);
+    // 보너스 퀴즈 (보너스가 있는 경우에만)
+    const bonusSection = document.getElementById('bonusSection');
+    if (mission.bonus) {
+        bonusSection.style.display = 'block';
+        loadBonus(mission.bonus);
+    } else {
+        bonusSection.style.display = 'none';
+    }
     
     // 완료 버튼 상태
     const progress = loadProgress();
@@ -541,6 +547,10 @@ function skipTyping() {
 
 // 보너스 퀴즈 로드
 function loadBonus(bonus) {
+    if (!bonus) {
+        return; // 보너스가 없으면 처리하지 않음
+    }
+    
     const quizBox = document.getElementById('quizBox');
     
     const progress = loadProgress();
@@ -548,10 +558,10 @@ function loadBonus(bonus) {
         // 주관식 형식인 경우 다시 풀 수 있도록 "다시 풀기" 버튼 제공
         if (bonus.type === "text") {
             quizBox.innerHTML = `
-                <div class="quiz-result correct">
+                <div class="quiz-result correct" style="margin-bottom: 15px;">
                     ✓ 보너스 미션 완료!
                 </div>
-                <button onclick="resetBonusMission()" class="quiz-reset-btn" style="margin-top: 10px; padding: 8px 15px; background: #D4722B; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                <button onclick="resetBonusMission()" class="quiz-reset-btn" style="width: 100%; padding: 12px; background: #D4722B; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px;">
                     다시 풀기
                 </button>
             `;
