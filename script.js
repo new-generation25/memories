@@ -593,8 +593,8 @@ function loadBonus(bonus) {
         // 주관식 형식인 경우 다시 풀 수 있도록 "다시 풀기" 버튼 제공
         if (bonus.type === "text") {
             quizBox.innerHTML = `
-                <div class="quiz-result correct" style="margin-bottom: 15px;">
-                    ✓ 보너스 미션 완료!
+                <div class="quiz-result correct" style="margin: 0; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 15px;">
+                    ✓ 완료됨
                 </div>
                 <button onclick="resetBonusMission()" class="quiz-reset-btn" style="width: 100%; padding: 12px; background: #D4722B; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px;">
                     다시 풀기
@@ -602,10 +602,10 @@ function loadBonus(bonus) {
             `;
             return;
         }
-        // 선택형은 완료 상태 유지
+        // 선택형은 완료 상태 유지 (메인 미션과 동일한 형식)
         quizBox.innerHTML = `
-            <div class="quiz-result correct">
-                ✓ 보너스 미션 완료!
+            <div class="quiz-result correct" style="margin: 0; padding: 15px; text-align: center; font-weight: bold; font-size: 18px;">
+                ✓ 완료됨
             </div>
         `;
         return;
@@ -681,7 +681,7 @@ function submitTextAnswer() {
         input.classList.add('correct');
         resultDiv.innerHTML = `
             <div class="quiz-result correct">
-                🎉 정답입니다! 보너스 포인트 획득!
+                🎉 정답입니다!
             </div>
         `;
         
@@ -691,6 +691,16 @@ function submitTextAnswer() {
             progress.bonusCompleted.push(currentMissionId);
             saveProgress(progress);
         }
+        
+        // 입력 필드 숨기고 완료 상태 표시 (메인 미션과 동일한 형식)
+        setTimeout(() => {
+            const quizBox = document.getElementById('quizBox');
+            quizBox.innerHTML = `
+                <div class="quiz-result correct" style="margin: 0; padding: 15px; text-align: center; font-weight: bold; font-size: 18px;">
+                    ✓ 완료됨
+                </div>
+            `;
+        }, 1500);
     } else {
         input.classList.add('wrong');
         resultDiv.innerHTML = `
