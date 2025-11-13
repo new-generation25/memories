@@ -264,8 +264,11 @@ function updateProgressBar() {
     }
 }
 
-// QR 스캐너 열기
+// QR 스캐너 관련 변수
 let html5QrCode;
+let isScanning = true;
+
+// QR 스캐너 열기
 function openScanner(missionId) {
     const progress = loadProgress();
     
@@ -275,6 +278,7 @@ function openScanner(missionId) {
         return;
     }
     
+    isScanning = true; // 스캔 플래그 초기화
     document.getElementById('scannerModal').style.display = 'block';
     
     // QR 스캐너 초기화
@@ -297,8 +301,27 @@ function openScanner(missionId) {
 
 // QR 스캔 성공
 function onScanSuccess(decodedText) {
-    closeScanner();
-    validateCode(decodedText);
+    if (!isScanning) return; // 중복 호출 방지
+    
+    isScanning = false;
+    console.log('QR 스캔 성공:', decodedText);
+    
+    // 스캐너를 먼저 정지
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            document.getElementById('scannerModal').style.display = 'none';
+            // 스캐너 정지 후 검증
+            setTimeout(() => {
+                validateCode(decodedText);
+            }, 100);
+        }).catch(err => {
+            console.error("스캐너 정지 오류:", err);
+            document.getElementById('scannerModal').style.display = 'none';
+            validateCode(decodedText);
+        });
+    } else {
+        validateCode(decodedText);
+    }
 }
 
 // QR 스캔 실패 (무시)
@@ -308,11 +331,13 @@ function onScanFailure(error) {
 
 // 스캐너 닫기
 function closeScanner() {
+    isScanning = false; // 스캔 중지
     if (html5QrCode) {
         html5QrCode.stop().then(() => {
             document.getElementById('scannerModal').style.display = 'none';
         }).catch(err => {
             console.error("스캐너 정지 오류:", err);
+            document.getElementById('scannerModal').style.display = 'none';
         });
     } else {
         document.getElementById('scannerModal').style.display = 'none';
