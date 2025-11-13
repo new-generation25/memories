@@ -29,7 +29,9 @@ const missionsData = {
 
 이것을 들고 "이게 내 마음이오"라고 하셨대요.
 
-풍선초 씨앗을 찾아보세요.
+지금 봉황1935 바깥에는 이것 천지에요. 
+빵빵하게 부풀려진 이것, 안에는 그당시 아버지의 마음이 담겨 있었데요.
+
 그 안에 비밀이 숨어있답니다.`,
         mission: "카페에서 풍선초 씨앗을 찾아 하트 모양을 확인하세요.",
         bonus: {
@@ -358,42 +360,78 @@ function submitCode() {
 
 // 코드 검증
 function validateCode(code) {
+    if (!code) {
+        alert('QR 코드 값이 비어있습니다!');
+        return;
+    }
+    
     // 공백 및 개행 문자 제거
-    code = code.trim();
-    console.log('스캔된 코드:', code);
+    code = String(code).trim();
+    console.log('=== 코드 검증 시작 ===');
+    console.log('원본 코드:', code);
     console.log('코드 길이:', code.length);
     
-    // URL에서 ID 추출 시도 (정규식 사용 - 대소문자 구분 없이)
-    const idMatch = code.match(/[?&]id=(\d+)/i);
-    if (idMatch) {
-        const id = idMatch[1];
-        console.log('추출된 ID:', id);
+    // 방법 1: URL에서 ID 추출 (가장 관대하게)
+    if (code.includes('mission') || code.includes('Mission') || code.includes('MISSION')) {
+        const patterns = [
+            /id=(\d+)/i,           // id=1
+            /id:(\d+)/i,           // id:1
+            /mission[\/\\]?(\d+)/i, // mission/1, mission1
+            /(\d+)$/               // 끝에 숫자만
+        ];
+        
+        for (const pattern of patterns) {
+            const match = code.match(pattern);
+            if (match && match[1]) {
+                const id = match[1];
+                console.log('패턴 매칭 성공:', pattern, '-> ID:', id);
+                if (missionsData[id]) {
+                    console.log('✓ 미션 찾음! 이동:', id);
+                    window.location.href = `mission.html?id=${id}`;
+                    return;
+                }
+            }
+        }
+    }
+    
+    // 방법 2: 순수 숫자만 있는 경우 (1, 2, 3, 4, 5)
+    if (/^\d+$/.test(code)) {
+        const id = code;
+        console.log('순수 숫자 감지:', id);
         if (missionsData[id]) {
-            console.log('미션 페이지로 이동:', id);
+            console.log('✓ 미션 찾음! 이동:', id);
             window.location.href = `mission.html?id=${id}`;
             return;
         }
     }
     
-    // 미션 데이터에서 코드 찾기 (BH001 형식)
-    let foundMission = null;
+    // 방법 3: BH001 형식
     const upperCode = code.toUpperCase();
-    for (let id in missionsData) {
+    for (const id in missionsData) {
         if (missionsData[id].code === upperCode) {
-            foundMission = id;
-            break;
+            console.log('✓ BH 코드 매칭! 이동:', id);
+            window.location.href = `mission.html?id=${id}`;
+            return;
         }
     }
     
-    if (foundMission) {
-        console.log('코드로 미션 찾음:', foundMission);
-        window.location.href = `mission.html?id=${foundMission}`;
-    } else {
-        console.error('인식 실패. 코드:', code);
-        console.error('코드 타입:', typeof code);
-        console.error('코드 바이트:', Array.from(code).map(c => c.charCodeAt(0)));
-        alert('올바른 QR 코드가 아닙니다!\n\n스캔된 값:\n' + code + '\n\n길이: ' + code.length);
+    // 방법 4: BH 제거하고 숫자만 추출
+    const bhMatch = code.match(/BH0*(\d+)/i);
+    if (bhMatch && bhMatch[1]) {
+        const id = bhMatch[1];
+        console.log('BH 코드에서 숫자 추출:', id);
+        if (missionsData[id]) {
+            console.log('✓ 미션 찾음! 이동:', id);
+            window.location.href = `mission.html?id=${id}`;
+            return;
+        }
     }
+    
+    // 모든 시도 실패
+    console.error('❌ 모든 패턴 매칭 실패');
+    console.error('코드:', code);
+    console.error('타입:', typeof code);
+    alert('올바른 QR 코드가 아닙니다!\n\n스캔된 값:\n' + code + '\n\n길이: ' + code.length + '\n\n형식: BH001 또는\nhttps://도메인/mission.html?id=1');
 }
 
 // 완주 모달
