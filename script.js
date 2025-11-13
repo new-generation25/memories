@@ -33,7 +33,7 @@ const missionsData = {
 빵빵하게 부풀려진 이것, 안에는 그당시 아버지의 마음이 담겨 있었데요.
 
 그 안에 비밀이 숨어있답니다.`,
-        mission: "카페에서 풍선초 씨앗을 찾아 하트 모양을 확인하세요.",
+        mission: "카페 바에서 풍선초 씨앗을 찾아 하트 모양을 확인하세요.",
         bonus: {
             question: "풍선초의 꽃말은 무엇일까요?",
             options: [
@@ -307,12 +307,7 @@ function onScanSuccess(decodedText) {
     
     isScanning = false;
     console.log('=== QR 스캔 성공 ===');
-    console.log('원본:', decodedText);
-    console.log('타입:', typeof decodedText);
-    console.log('길이:', decodedText ? decodedText.length : 0);
-    
-    // 긴급 디버깅: 화면에 바로 표시
-    alert('QR 스캔됨!\n\n값: ' + decodedText + '\n\n타입: ' + typeof decodedText + '\n\n길이: ' + (decodedText ? decodedText.length : 0));
+    console.log('스캔된 값:', decodedText);
     
     // 스캐너를 먼저 정지
     if (html5QrCode) {
@@ -371,6 +366,18 @@ function validateCode(code) {
     console.log('원본 코드:', code);
     console.log('코드 길이:', code.length);
     
+    // 단축 URL 감지 (qrco.de 등) - 가장 먼저 체크!
+    if (code.includes('qrco.de') || code.includes('bit.ly') || code.includes('tinyurl') || 
+        code.includes('goo.gl') || code.includes('short') || 
+        (code.startsWith('http') && code.length < 50)) {
+        
+        console.log('단축 URL 감지! 브라우저가 자동으로 리다이렉트합니다:', code);
+        // 단축 URL은 브라우저가 자동으로 최종 URL로 리다이렉트하므로
+        // 그냥 이동시키면 됩니다. 최종 URL에서 mission.html이 처리할 것입니다.
+        window.location.href = code;
+        return;
+    }
+    
     // 방법 1: URL에서 ID 추출 (가장 관대하게)
     if (code.includes('mission') || code.includes('Mission') || code.includes('MISSION')) {
         const patterns = [
@@ -425,6 +432,13 @@ function validateCode(code) {
             window.location.href = `mission.html?id=${id}`;
             return;
         }
+    }
+    
+    // 방법 5: HTTP/HTTPS URL인 경우 직접 리다이렉트
+    if (code.startsWith('http://') || code.startsWith('https://')) {
+        console.log('HTTP/HTTPS URL 감지, 직접 리다이렉트');
+        window.location.href = code;
+        return;
     }
     
     // 모든 시도 실패
