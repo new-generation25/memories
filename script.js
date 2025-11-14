@@ -1,4 +1,6 @@
 const APP_KEY = 'bonghwang_memories_v2';
+const ADMIN_PASSWORD = '1935';
+const ADMIN_SESSION_KEY = 'bonghwang_admin_access';
 const typingSpeed = 25;
 
 const missionPages = {
@@ -641,6 +643,56 @@ function goToIntro() {
 /* Admin page -------------------------------------------------- */
 
 function initAdminPage() {
+    enforceAdminPassword(loadAdminDashboard);
+}
+
+function enforceAdminPassword(onAuthorized) {
+    const gate = document.getElementById("adminGate");
+    if (!gate) {
+        onAuthorized?.();
+        return;
+    }
+
+    const saved = sessionStorage.getItem(ADMIN_SESSION_KEY);
+    if (saved === "granted") {
+        gate.remove();
+        onAuthorized?.();
+        return;
+    }
+
+    const form = gate.querySelector("form");
+    const input = gate.querySelector("input");
+    const error = gate.querySelector(".gate-error");
+    const cancelBtn = gate.querySelector("[data-cancel]");
+
+    const grantAccess = () => {
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "granted");
+        gate.remove();
+        onAuthorized?.();
+    };
+
+    form?.addEventListener("submit", event => {
+        event.preventDefault();
+        if (input?.value.trim() === ADMIN_PASSWORD) {
+            grantAccess();
+        } else {
+            if (error) {
+                error.textContent = "비밀번호가 올바르지 않습니다.";
+                error.style.display = "block";
+            }
+            if (input) {
+                input.value = "";
+                input.focus();
+            }
+        }
+    });
+
+    cancelBtn?.addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
+}
+
+function loadAdminDashboard() {
     const state = loadState();
     const tableBody = document.querySelector("#adminTable tbody");
     const summary = document.getElementById("adminSummary");
@@ -649,23 +701,31 @@ function initAdminPage() {
 
     const players = Object.values(state.players);
     if (!players.length) {
-        tableBody.innerHTML = `<tr><td colspan="3" class="muted">저장된 기록이 없습니다.</td></tr>`;
-        summary.textContent = "참여 기록이 없습니다.";
+        if (tableBody) {
+            tableBody.innerHTML = `<tr><td colspan="3" class="muted">저장된 기록이 없습니다.</td></tr>`;
+        }
+        if (summary) {
+            summary.textContent = "참여 기록이 없습니다.";
+        }
     } else {
-        tableBody.innerHTML = players.map(player => {
-            const completedList = Object.entries(player.completions || {}).flatMap(([pageId, tasks]) => {
-                return Object.entries(tasks).map(([taskKey, record]) => `${pageId}-${taskKey} (${new Date(record.completedAt).toLocaleDateString()})`);
-            });
-            return `
-                <tr>
-                    <td><strong>${player.nickname}</strong></td>
-                    <td>${new Date(player.createdAt).toLocaleDateString()}</td>
-                    <td>${completedList.length ? completedList.join("<br>") : "<span class='muted'>미완료</span>"}</td>
-                </tr>
-            `;
-        }).join("");
+        if (tableBody) {
+            tableBody.innerHTML = players.map(player => {
+                const completedList = Object.entries(player.completions || {}).flatMap(([pageId, tasks]) => {
+                    return Object.entries(tasks).map(([taskKey, record]) => `${pageId}-${taskKey} (${new Date(record.completedAt).toLocaleDateString()})`);
+                });
+                return `
+                    <tr>
+                        <td><strong>${player.nickname}</strong></td>
+                        <td>${new Date(player.createdAt).toLocaleDateString()}</td>
+                        <td>${completedList.length ? completedList.join("<br>") : "<span class='muted'>미완료</span>"}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
 
-        summary.textContent = `총 ${players.length}명의 기록이 저장되어 있습니다.`;
+        if (summary) {
+            summary.textContent = `총 ${players.length}명의 기록이 저장되어 있습니다.`;
+        }
     }
 
     exportBtn?.addEventListener("click", () => {

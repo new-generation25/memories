@@ -182,6 +182,52 @@ button.small {
     margin-bottom: 10px;
 }
 
+.admin-gate {
+    position: fixed;
+    inset: 0;
+    background: rgba(59, 35, 18, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 999;
+}
+
+.admin-gate-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 28px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.admin-gate-card h2 {
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.admin-gate-card p {
+    margin-bottom: 16px;
+}
+
+.admin-gate-card input {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.gate-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.gate-error {
+    min-height: 20px;
+    font-size: 14px;
+    color: #c0392b;
+}
+
 /* Mission page */
 .mission-page .mission-heading {
     margin-bottom: 20px;

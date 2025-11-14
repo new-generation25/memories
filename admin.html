@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="admin">
+    <div id="adminGate" class="admin-gate" aria-live="polite">
+        <form class="admin-gate-card">
+            <h2>관리자 전용 페이지</h2>
+            <p>비밀번호를 입력하면 참여 기록을 확인할 수 있습니다.</p>
+            <input type="password" placeholder="비밀번호" autocomplete="off" required>
+            <p class="gate-error" role="alert"></p>
+            <div class="gate-actions">
+                <button type="submit">입장하기</button>
+                <button type="button" class="ghost" data-cancel>돌아가기</button>
+            </div>
+        </form>
+    </div>
     <div class="container wide">
         <header class="hero-card">
             <p class="eyebrow">Admin</p>
