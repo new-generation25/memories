@@ -486,7 +486,10 @@ function updateGlobalProgressBanner() {
 
 function formatAnswerHint(answer) {
     if (!answer) return "정답을 입력하세요";
-    return answer.split(/\s+/).map(word => "ㅇ".repeat(word.length)).join(" ");
+    const parts = answer.split(/\s+/).filter(Boolean);
+    const hint = parts.map(word => "ㅇ".repeat(word.length)).join(" ");
+    const total = parts.reduce((sum, word) => sum + word.length, 0);
+    return `${hint} (${total}글자)`;
 }
 
 /* Intro page -------------------------------------------------- */
