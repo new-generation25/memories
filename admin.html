@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - 봉황 메모리즈</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-refresh {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-home {
+            background: #2196F3;
+            color: white;
+        }
+
+        .stats-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .users-table {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #FFF8DC;
+            font-weight: bold;
+            color: #D4722B;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .mission-badge-small {
+            display: inline-block;
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 5px;
+            font-size: 12px;
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .main-mission {
+            background: #FFE4B5;
+            color: #D4722B;
+            font-weight: bold;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>📊 관리자 페이지</h1>
+            <div class="admin-controls">
+                <button class="btn-refresh" onclick="refreshData()">🔄 새로고침</button>
+                <button class="btn-reset" onclick="resetAllData()">🗑️ 전체 데이터 초기화</button>
+                <button class="btn-home" onclick="goHome()">🏠 홈으로</button>
+            </div>
+        </div>
+
+        <div class="stats-box">
+            <h2>📈 통계</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">총 참여자</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMainCompleted">0</div>
+                    <div class="stat-label">메인미션 완료</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalBonusCompleted">0</div>
+                    <div class="stat-label">보너스미션 완료</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMissions">0</div>
+                    <div class="stat-label">전체 미션 완료</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="users-table">
+            <h2>👥 참여자 목록</h2>
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>닉네임</th>
+                        <th>메인 미션</th>
+                        <th>보너스 미션</th>
+                        <th>전체 미션</th>
+                        <th>완료한 미션</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td colspan="5" class="no-data">데이터가 없습니다</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // 모든 미션 ID 정의
+        const allMainMissions = ['main1', 'main2', 'main3', 'main4', 'main5'];
+        const allBonusMissions = [
+            'bonus6', 'bonus7', 'bonus8', 'bonus9', 'bonus10',
+            'bonus11', 'bonus12', 'bonus13', 'bonus14', 'bonus15', 'bonus16'
+        ];
+
+        window.onload = function() {
+            loadAdminData();
+        };
+
+        function loadAdminData() {
+            const allProgress = getAllProgress();
+            const users = Object.keys(allProgress);
+
+            // 통계 계산
+            let totalMainCompleted = 0;
+            let totalBonusCompleted = 0;
+            let totalMissionsCount = 0;
+
+            users.forEach(nickname => {
+                const progress = allProgress[nickname];
+                const mainCount = progress.completed.filter(id => id.startsWith('main')).length;
+                const bonusCount = progress.completed.filter(id => id.startsWith('bonus')).length;
+
+                totalMainCompleted += mainCount;
+                totalBonusCompleted += bonusCount;
+                totalMissionsCount += progress.completed.length;
+            });
+
+            // 통계 표시
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalMainCompleted').textContent = totalMainCompleted;
+            document.getElementById('totalBonusCompleted').textContent = totalBonusCompleted;
+            document.getElementById('totalMissions').textContent = totalMissionsCount;
+
+            // 테이블 렌더링
+            renderUsersTable(allProgress);
+        }
+
+        function renderUsersTable(allProgress) {
+            const tbody = document.getElementById('usersTableBody');
+            const users = Object.keys(allProgress);
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="no-data">데이터가 없습니다</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+
+            users.forEach(nickname => {
+                const progress = allProgress[nickname];
+                const mainCompleted = progress.completed.filter(id => id.startsWith('main'));
+                const bonusCompleted = progress.completed.filter(id => id.startsWith('bonus'));
+
+                const row = document.createElement('tr');
+
+                // 닉네임
+                const nicknameCell = document.createElement('td');
+                nicknameCell.textContent = nickname;
+                nicknameCell.style.fontWeight = 'bold';
+                row.appendChild(nicknameCell);
+
+                // 메인 미션 수
+                const mainCountCell = document.createElement('td');
+                mainCountCell.textContent = `${mainCompleted.length}/${allMainMissions.length}`;
+                row.appendChild(mainCountCell);
+
+                // 보너스 미션 수
+                const bonusCountCell = document.createElement('td');
+                bonusCountCell.textContent = `${bonusCompleted.length}/${allBonusMissions.length}`;
+                row.appendChild(bonusCountCell);
+
+                // 전체 미션 수
+                const totalCountCell = document.createElement('td');
+                totalCountCell.textContent = `${progress.completed.length}/${allMainMissions.length + allBonusMissions.length}`;
+                row.appendChild(totalCountCell);
+
+                // 완료한 미션 목록
+                const missionsCell = document.createElement('td');
+                let missionsHTML = '';
+
+                // 메인 미션 표시
+                mainCompleted.forEach(id => {
+                    missionsHTML += `<span class="mission-badge-small main-mission">${id}</span>`;
+                });
+
+                // 보너스 미션 표시
+                bonusCompleted.forEach(id => {
+                    missionsHTML += `<span class="mission-badge-small">${id}</span>`;
+                });
+
+                missionsCell.innerHTML = missionsHTML || '-';
+                row.appendChild(missionsCell);
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function refreshData() {
+            loadAdminData();
+            alert('데이터를 새로고침했습니다!');
+        }
+    </script>
+</body>
+</html>

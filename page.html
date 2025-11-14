@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미션 페이지 - 봉황 메모리즈</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container mission-page">
+        <!-- 헤더 -->
+        <div class="page-header">
+            <button class="back-btn" onclick="goHome()">← 홈으로</button>
+            <h1 id="pageLocation">장소</h1>
+        </div>
+
+        <!-- 메인 미션 -->
+        <div id="mainMissionSection" style="display: none;">
+            <div class="mission-box main-mission">
+                <div class="mission-badge">메인 미션</div>
+                <h2 id="mainTitle"></h2>
+
+                <!-- 스토리 (있는 경우) -->
+                <div id="mainStory" class="story-box" style="display: none;">
+                    <p id="mainStoryText"></p>
+                    <button class="skip-btn" onclick="skipTyping()">스킵</button>
+                </div>
+
+                <p id="mainDescription" class="mission-description"></p>
+
+                <!-- 퀴즈 형식 -->
+                <div id="mainQuiz" style="display: none;">
+                    <input type="text" id="mainAnswer" placeholder="정답을 입력하세요">
+                    <button onclick="submitMainAnswer()">제출</button>
+                    <div id="mainResult" class="result-message"></div>
+                </div>
+
+                <!-- QR 형식 -->
+                <div id="mainQR" style="display: none;">
+                    <p class="qr-guide">미션을 완료한 후, '미션완료 QR'을 스캔하세요!</p>
+                    <div id="mainQRResult" class="result-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 보너스 미션들 -->
+        <div id="bonusMissionsSection"></div>
+
+        <!-- 닉네임 미설정 안내 -->
+        <div id="noNicknameSection" style="display: none;">
+            <div class="info-box">
+                <h2>⚠️ 닉네임을 먼저 설정해주세요</h2>
+                <p>미션을 진행하려면 먼저 닉네임을 설정해야 합니다.</p>
+                <button onclick="goHome()">홈으로 가기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        let currentPageNumber = null;
+
+        window.onload = function() {
+            // URL에서 페이지 번호 추출
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageNum = urlParams.get('p');
+            const complete = urlParams.get('complete'); // 완료 QR인지 확인
+
+            if (!pageNum) {
+                alert('잘못된 접근입니다!');
+                goHome();
+                return;
+            }
+
+            currentPageNumber = parseInt(pageNum);
+
+            // 닉네임 확인
+            if (!getNickname()) {
+                document.getElementById('noNicknameSection').style.display = 'block';
+                return;
+            }
+
+            // 완료 QR 스캔인 경우
+            if (complete) {
+                handleCompleteQR(complete);
+                return;
+            }
+
+            // 페이지 로드
+            loadPage(currentPageNumber);
+        };
+
+        function loadPage(pageNum) {
+            const pageData = pagesData[pageNum];
+
+            if (!pageData) {
+                alert('존재하지 않는 페이지입니다!');
+                goHome();
+                return;
+            }
+
+            // 장소 표시
+            document.getElementById('pageLocation').textContent = pageData.location;
+
+            // 메인 미션 로드
+            if (pageData.mainMission) {
+                loadMainMission(pageData.mainMission);
+            }
+
+            // 보너스 미션 로드
+            if (pageData.bonusMissions && pageData.bonusMissions.length > 0) {
+                loadBonusMissions(pageData.bonusMissions);
+            }
+        }
+
+        function loadMainMission(mission) {
+            const section = document.getElementById('mainMissionSection');
+            section.style.display = 'block';
+
+            document.getElementById('mainTitle').textContent = mission.title;
+            document.getElementById('mainDescription').textContent = mission.description;
+
+            // 스토리가 있으면 타이핑 효과
+            if (mission.story) {
+                const storyBox = document.getElementById('mainStory');
+                const storyText = document.getElementById('mainStoryText');
+                storyBox.style.display = 'block';
+                typeText(storyText, mission.story);
+            }
+
+            // 이미 완료된 미션인지 확인
+            if (isMissionCompleted(mission.id)) {
+                showCompletedMission('main', mission.type);
+                return;
+            }
+
+            // 미션 타입에 따라 표시
+            if (mission.type === 'quiz') {
+                document.getElementById('mainQuiz').style.display = 'block';
+            } else if (mission.type === 'qr') {
+                document.getElementById('mainQR').style.display = 'block';
+            }
+        }
+
+        function loadBonusMissions(missions) {
+            const section = document.getElementById('bonusMissionsSection');
+            section.innerHTML = '';
+
+            missions.forEach((mission, index) => {
+                const missionBox = document.createElement('div');
+                missionBox.className = 'mission-box bonus-mission';
+                missionBox.id = `bonus_${mission.id}`;
+
+                const isCompleted = isMissionCompleted(mission.id);
+
+                let html = `
+                    <div class="mission-badge bonus-badge">보너스 미션 ${index + 1}</div>
+                    <h3>${mission.title}</h3>
+                    <p class="mission-description">${mission.description}</p>
+                `;
+
+                if (isCompleted) {
+                    html += `<div class="result-message success">✓ 완료됨</div>`;
+                } else {
+                    if (mission.type === 'quiz') {
+                        html += `
+                            <input type="text" id="answer_${mission.id}" placeholder="정답을 입력하세요">
+                            <button onclick="submitBonusAnswer('${mission.id}', '${mission.answer}')">제출</button>
+                            <div id="result_${mission.id}" class="result-message"></div>
+                        `;
+                    } else if (mission.type === 'qr') {
+                        html += `
+                            <p class="qr-guide">미션을 완료한 후, '미션완료 QR'을 스캔하세요!</p>
+                            <div id="result_${mission.id}" class="result-message"></div>
+                        `;
+                    }
+                }
+
+                missionBox.innerHTML = html;
+                section.appendChild(missionBox);
+            });
+        }
+
+        function submitMainAnswer() {
+            const pageData = pagesData[currentPageNumber];
+            const mission = pageData.mainMission;
+            const userAnswer = document.getElementById('mainAnswer').value.trim();
+            const resultDiv = document.getElementById('mainResult');
+
+            if (!userAnswer) {
+                alert('정답을 입력해주세요!');
+                return;
+            }
+
+            if (compareAnswers(userAnswer, mission.answer)) {
+                completeMission(mission.id);
+                resultDiv.className = 'result-message success';
+                resultDiv.textContent = '🎉 정답입니다! 미션 완료!';
+
+                setTimeout(() => {
+                    showCompletedMission('main', mission.type);
+                }, 1500);
+            } else {
+                resultDiv.className = 'result-message error';
+                resultDiv.textContent = '❌ 틀렸습니다. 다시 시도해보세요!';
+                document.getElementById('mainAnswer').value = '';
+
+                setTimeout(() => {
+                    resultDiv.textContent = '';
+                }, 2000);
+            }
+        }
+
+        function submitBonusAnswer(missionId, correctAnswer) {
+            const userAnswer = document.getElementById(`answer_${missionId}`).value.trim();
+            const resultDiv = document.getElementById(`result_${missionId}`);
+
+            if (!userAnswer) {
+                alert('정답을 입력해주세요!');
+                return;
+            }
+
+            if (compareAnswers(userAnswer, correctAnswer)) {
+                completeMission(missionId);
+                resultDiv.className = 'result-message success';
+                resultDiv.textContent = '🎉 정답입니다! 보너스 미션 완료!';
+
+                setTimeout(() => {
+                    const missionBox = document.getElementById(`bonus_${missionId}`);
+                    missionBox.querySelector('input').style.display = 'none';
+                    missionBox.querySelector('button').style.display = 'none';
+                    resultDiv.textContent = '✓ 완료됨';
+                }, 1500);
+            } else {
+                resultDiv.className = 'result-message error';
+                resultDiv.textContent = '❌ 틀렸습니다. 다시 시도해보세요!';
+                document.getElementById(`answer_${missionId}`).value = '';
+
+                setTimeout(() => {
+                    resultDiv.textContent = '';
+                }, 2000);
+            }
+        }
+
+        function showCompletedMission(type, missionType) {
+            if (type === 'main') {
+                document.getElementById('mainQuiz').style.display = 'none';
+                document.getElementById('mainQR').style.display = 'none';
+                document.getElementById('mainResult').className = 'result-message success';
+                document.getElementById('mainResult').textContent = '✓ 완료됨';
+                document.getElementById('mainQRResult').className = 'result-message success';
+                document.getElementById('mainQRResult').textContent = '✓ 완료됨';
+
+                if (missionType === 'quiz') {
+                    document.getElementById('mainResult').style.display = 'block';
+                } else {
+                    document.getElementById('mainQR').style.display = 'block';
+                }
+            }
+        }
+
+        function handleCompleteQR(missionId) {
+            // 완료 QR을 스캔한 경우
+            if (!getNickname()) {
+                alert('닉네임을 먼저 설정해주세요!');
+                goHome();
+                return;
+            }
+
+            const completed = completeMission(missionId);
+
+            if (completed) {
+                alert('🎉 미션 완료!');
+            } else {
+                alert('이미 완료한 미션입니다!');
+            }
+
+            // 해당 페이지로 리다이렉트 (완료 표시를 위해)
+            window.location.href = `page.html?p=${currentPageNumber}`;
+        }
+
+        // Enter 키로 제출
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const mainAnswer = document.getElementById('mainAnswer');
+                    if (mainAnswer && mainAnswer === document.activeElement) {
+                        submitMainAnswer();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
