@@ -43,7 +43,7 @@ const missionPages = {
             key: "main-1",
             label: "메인 미션",
             title: "풍선초 키링 만들기",
-            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
+            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.(유료체험)",
             type: "code",
             codeHint: "완료 코드를 입력하세요",
             codes: ["BLOOM"]
@@ -214,7 +214,7 @@ const missionPages = {
         title: "샤브맛집 호우오우",
         location: "호우오우",
         meta: ["PAGE 8", "보너스"],
-        story: `아직 동네에 살고 있는 지영이가 추천해 준 집이에요. 혼자 식사하기에도 좋데요.`,
+        story: `아직 동네에 살고 있는 지영이가 추천해 준 맛집이에요. 혼자 식사하기에도 좋데요.`,
         bonusTasks: [{
             key: "bonus-8",
             label: "보너스 미션",
@@ -268,7 +268,7 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
                 key: "bonus-6",
                 label: "보너스 미션 6",
                 title: "부모님 전상서",
-                description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
+                description: "그리운 누군가에게 편지를 써보세요.(유료).",
                 type: "code",
                 codeHint: "완료 코드를 입력하세요",
                 codes: ["LETTER"]
@@ -340,22 +340,6 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
             type: "code",
             codeHint: "완료 코드를 입력하세요",
             codes: ["RECEIPT"]
-        }]
-    },
-    "11": {
-        id: "11",
-        title: "초입길의 기록",
-        location: "초입길",
-        meta: ["PAGE 11", "보너스"],
-        story: `초입길 아카이브에는 1980년대 별밤 사연이 빼곡히 남아 있어요.
-마지막 장에는 “초입길 사장님이 직접 적어주세요”라는 문장이 적혀 있죠.`,
-        bonusTasks: [{
-            key: "bonus-11",
-            label: "보너스 미션",
-            title: "누가 썼을까?",
-            question: "초입길 사장님이 남긴 메시지에서 '별밤 DJ'로 언급된 인물은 누구일까요?",
-            type: "text",
-            answer: "초입길 사장님"
         }]
     }
 };
