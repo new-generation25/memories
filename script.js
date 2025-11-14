@@ -2,6 +2,7 @@ const APP_KEY = 'bonghwang_memories_v2';
 const ADMIN_PASSWORD = '1935';
 const ADMIN_SESSION_KEY = 'bonghwang_admin_access';
 const typingSpeed = 25;
+let progressBannerEl = null;
 
 const missionPages = {
     "1": {
@@ -384,6 +385,7 @@ function setNickname(name) {
         };
     }
     saveState(state);
+    updateGlobalProgressBanner();
     return true;
 }
 
@@ -411,6 +413,7 @@ function recordCompletion(pageId, taskKey, detail) {
         completedAt: new Date().toISOString()
     };
     saveState(state);
+    updateGlobalProgressBanner();
 }
 
 function getCompletion(pageId, taskKey) {
@@ -429,6 +432,48 @@ function normalizeInput(value) {
 function compareAnswers(userAnswer, correctAnswer) {
     if (!userAnswer || !correctAnswer) return false;
     return normalizeInput(userAnswer) === normalizeInput(correctAnswer);
+}
+
+function getProgressCounts(nickname) {
+    const state = loadState();
+    const player = state.players[nickname];
+    if (!player || !player.completions) {
+        return { main: 0, bonus: 0 };
+    }
+    let main = 0;
+    let bonus = 0;
+    Object.values(player.completions).forEach(tasks => {
+        Object.keys(tasks).forEach(key => {
+            if (key.startsWith("main")) main += 1;
+            else if (key.startsWith("bonus")) bonus += 1;
+        });
+    });
+    return { main, bonus };
+}
+
+function renderGlobalProgressBanner() {
+    if (progressBannerEl || !document.body) return;
+    progressBannerEl = document.createElement("div");
+    progressBannerEl.id = "globalProgress";
+    progressBannerEl.className = "progress-banner";
+    document.body.prepend(progressBannerEl);
+    document.body.classList.add("has-progress-banner");
+    updateGlobalProgressBanner();
+}
+
+function updateGlobalProgressBanner() {
+    if (!progressBannerEl) return;
+    const nickname = getCurrentNickname();
+    if (!nickname) {
+        progressBannerEl.innerHTML = `<span>닉네임을 저장하면 진행 현황이 여기 표시됩니다.</span>`;
+        return;
+    }
+    const counts = getProgressCounts(nickname);
+    progressBannerEl.innerHTML = `
+        <span class="progress-name">${nickname}</span>
+        <span>메인미션 ${counts.main}개</span>
+        <span>보너스미션 ${counts.bonus}개</span>
+    `;
 }
 
 function formatAnswerHint(answer) {
@@ -751,6 +796,7 @@ function loadAdminDashboard() {
 
 document.addEventListener("DOMContentLoaded", () => {
     const page = document.body.dataset.page || "index";
+    renderGlobalProgressBanner();
     if (page === "index") initIntroPage();
     if (page === "mission") initMissionPage();
     if (page === "admin") initAdminPage();
