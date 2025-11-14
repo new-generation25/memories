@@ -5,14 +5,14 @@
 }
 
 :root {
-    --bg: #f5f3ef;
-    --card: #ffffff;
-    --primary: #d5651a;
-    --primary-dark: #b94e08;
-    --accent: #ffd27d;
-    --text: #2d1f15;
-    --muted: #7a7068;
-    --border: #e0d8cf;
+    --bg: #f4ecde;
+    --card: #fdf6eb;
+    --primary: #8a4a24;
+    --primary-dark: #6d3314;
+    --accent: #d8a15f;
+    --text: #3b2312;
+    --muted: #9b8777;
+    --border: #e6d5c4;
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -48,10 +48,34 @@ a {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
+.hero-card.poster-tone {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(237, 213, 181, 0.95), rgba(245, 229, 207, 0.95));
+}
+
+.hero-card.poster-tone::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(138, 74, 36, 0.15), transparent 45%);
+    pointer-events: none;
+}
+
+.hero-card.poster-tone > * {
+    position: relative;
+}
+
 .hero-card h1 {
     font-size: 28px;
     margin-bottom: 12px;
     color: var(--primary);
+}
+
+.hero-story {
+    font-size: 16px;
+    color: var(--text);
+    opacity: 0.9;
 }
 
 .eyebrow {
