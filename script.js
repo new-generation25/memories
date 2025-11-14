@@ -40,13 +40,13 @@ const missionPages = {
             key: "main-1",
             label: "메인 미션",
             title: "풍선초 키링 만들기",
-            description: "현장에서 키링을 완성한 뒤 스태프에게 완료 QR 코드를 받아 입력하세요.",
+            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
             type: "code",
-            codeHint: "완료 QR 코드를 입력하세요",
-            codes: ["BH001-DONE", "KEYRING"]
+            codeHint: "완료 코드를 입력하세요",
+            codes: ["BLOOM"]
         },
         bonusTasks: [{
-            key: "bonus-1",
+            key: "bonus-10",
             label: "보너스 미션",
             title: "궁금한 장식",
             question: "카페 중앙 천장에 걸린, 악몽을 막아준다는 장식의 이름은 무엇일까요?",
@@ -59,17 +59,19 @@ const missionPages = {
         title: "공원반점 쉼표",
         location: "공원반점 앞",
         meta: ["PAGE 2", "보너스"],
-        story: `봉황동 골목을 걷다 보면 공원반점 앞 의자가 눈에 띄어요.
-의자 옆에는 빨간 신발과 파란 신발 그림, 그리고 짧은 시 한 구절이 붙어 있답니다.
-
-잠깐 멈춰 서서 시인의 마음을 읽어주세요.`,
+        story: `공원방점의 주방장 사장님은 시인이세요. 마을에서 다양한 문학활동도 하시지요.공원반점 벽면에는 시가 적혀있어요.
+        빨간색 신호등. 
+        풀린 신발끈. 
+        길냥이. 
+        들꽃. 
+        시.`,
         bonusTasks: [{
             key: "bonus-2",
             label: "보너스 미션",
             title: "시의 제목",
-            question: "공원반점 앞에 붙어 있는 시의 제목은 무엇일까요?",
+            question: "공원반점 담벼락에 적혀 있는 이 시의 제목은 무엇일까요?",
             type: "text",
-            answer: "잠깐 멈춰"
+            answer: "멈추게 하는 것"
         }]
     },
     "3": {
@@ -77,29 +79,28 @@ const missionPages = {
         title: "씩스데이 골목",
         location: "씩스데이",
         meta: ["PAGE 3", "보너스"],
-        story: `큼지막한 제주 감귤 상자가 쌓인 듯한 씩스데이는 지역 청년들이 만든 팝업 스토어예요.
-현장 안내판에는 제주 오름의 이름이 적혀 있죠. 그중 하나를 찾아주세요.`,
+        story: `싹스데이는 여러 종류의 양말을 판매하고 있습니다. 그중에서 특색있는 양말을 찾아보세요.`,
         bonusTasks: [{
             key: "bonus-3",
             label: "보너스 미션",
-            title: "여기 제주도?",
-            question: "안내판에 적힌 제주 명칭 중 '벚꽃이 가장 많이 피는 제주도의 이름'은 무엇일까요?",
+            title: "여기는 제주도?",
+            question: "'벚꽃과 유채꽃이 많은 제주도의 오름 이름은?' 정답은 이 안에 있습니다.",
             type: "text",
             answer: "큰샘의오름"
         }]
     },
     "4": {
         id: "4",
-        title: "패홍쉘터의 오후",
-        location: "패홍쉘터",
+        title: "패홍쉼터의 오후",
+        location: "패홍쉼터",
         meta: ["PAGE 4", "보너스"],
-        story: `패홍쉘터 벽면에는 김해 사람들이 사랑한 돼지고기 부위 소개가 붙어 있어요.
-그중 하나는 오직 이 동네에서만 특별하게 불린답니다.`,
+        story: `패총쉼터는 오래 전부터 마을 분들의 쉼터 역할을 했습니다.
+그리고 김해에서 유명한 그것을 홍보하기 위한 표지판에 새로 세워졌어요.`,
         bonusTasks: [{
             key: "bonus-4",
             label: "보너스 미션",
             title: "맛난다 맛나",
-            question: "패홍쉘터 안내판에 적힌 김해 대표 돼지고기 부위는 무엇일까요?",
+            question: "김해 부원동에는 ㅇㅇㅇ 거리가 있습니다. 김해에서 유명한 돼지고기의 이 부위는?",
             type: "text",
             answer: "뒷고기"
         }]
@@ -148,8 +149,8 @@ const missionPages = {
     },
     "7": {
         id: "7",
-        title: "능소화 포토존",
-        location: "능소화 골목",
+        title: "봉리단길 포토존",
+        location: "포토존 골목",
         meta: ["PAGE 7", "메인 & 보너스"],
         story: `세 번째 소원이에요.
 
@@ -160,7 +161,7 @@ const missionPages = {
 어렸을 때 아버지가 여기서 사진 찍자고 하셨어요.
 "아빠가 제일 좋아하는 꽃이야"라고 하시면서요.
 
-능소화는 여름에 피는 꽃인데
+ㅇㅇㅇ는 여름에 피는 꽃인데
 지금은 꽃이 없네요.
 
 예전엔 봉황동 곳곳에 있었는데,
@@ -171,6 +172,7 @@ const missionPages = {
 아버지는 제와 함께 사진 찍기를
 계속 기다리셨을 거예요.
 
+지금은 겨울이라 꽃이 다 떨어졌지만 여름이 되면 또 다시 필거에요.
 여러분, 여기서 사진 한 장 찍어주실래요?`,
         mainTask: {
             key: "main-3",
@@ -184,23 +186,22 @@ const missionPages = {
             key: "bonus-7",
             label: "보너스 미션",
             title: "꽃 이름",
-            question: "담장 안쪽 화분에 심어진 하얀 꽃의 이름은 무엇일까요? (힌트: 프랑스어 이름)",
+            question: "봉황동의 유명한 능소화 포토존 앞에도 꽃이 있습니다. 그 꽃집의 이름은?",
             type: "text",
             answer: "아르모니"
         }]
     },
     "8": {
         id: "8",
-        title: "호유오우의 가격표",
-        location: "호유오우",
+        title: "샤브맛집 호우오우",
+        location: "호우오우",
         meta: ["PAGE 8", "보너스"],
-        story: `사바나 소품이 가득한 호유오우에는 오래된 전화기 모형이 있어요.
-가격표 글자가 지워져 있는데 사장님이 살짝 알려주셨어요.`,
+        story: `아직 동네에 살고 있는 지영이가 추천해 준 집이에요. 혼자 식사하기에도 좋데요.`,
         bonusTasks: [{
             key: "bonus-8",
             label: "보너스 미션",
             title: "이건 얼마?",
-            question: "사바나 전화기 모형의 가격은 얼마일까요?",
+            question: "호우오우 샤브샤브의 가격은 앤화로 얼마일까요?",
             type: "text",
             answer: "1300"
         }]
@@ -238,36 +239,35 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
         mainTask: {
             key: "main-4",
             label: "메인 미션",
-            title: "별이 빛나는 봉황동",
-            description: "라디오 부스에서 사연을 남기고 스태프에게 완료 QR 코드를 받아 입력하세요.",
+            title: "별이 빛나는 봉황동 밤에",
+            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
             type: "code",
-            codeHint: "완료 QR 코드를 입력하세요",
-            codes: ["BH004-DONE", "STAR-NIGHT"]
+            codeHint: "완료 코드를 입력하세요",
+            codes: ["STARLIGHT"]
         },
         bonusTasks: [
             {
                 key: "bonus-6",
                 label: "보너스 미션 6",
                 title: "부모님 전상서",
-                description: "부모님께 편지를 써서 스태프에게 보여주면 완료 QR을 받을 수 있어요.",
+                description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
                 type: "code",
-                codeHint: "완료 QR 코드를 입력하세요",
-                codes: ["BONUS-6"]
+                codeHint: "완료 코드를 입력하세요",
+                codes: ["LETTER"]
             },
             {
-                key: "bonus-15",
-                label: "보너스 미션 15",
-                title: "벌밤지기",
-                description: "DJ에게 사연을 전하고 받은 보너스 QR 코드를 입력하세요.",
-                type: "code",
-                codeHint: "완료 QR 코드를 입력하세요",
-                codes: ["BONUS-15"]
+                key: "bonus-16",
+                label: "보너스 미션",
+                title: "별밤",
+                question: "8090 인기 라디오프로그램 '별이 빛나는 밤에'에서 제일 오랫동안 DJ를 맡은 별밤지기는?",
+                type: "text",
+                answer: "이문세"
             }
         ]
     },
     "10": {
         id: "10",
-        title: "방하림의 무대",
+        title: "가족오락관",
         location: "방하림",
         meta: ["PAGE 10", "메인 & 보너스"],
         story: `마지막 소원이에요.
@@ -309,19 +309,19 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
             key: "main-5",
             label: "메인 미션",
             title: "가족오락관 게임",
-            description: "현장 게임을 마친 뒤 제공받은 완료 QR 코드를 입력하세요.",
+            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
             type: "code",
-            codeHint: "완료 QR 코드를 입력하세요",
-            codes: ["BH005-DONE", "FAMILY"]
+            codeHint: "완료 코드를 입력하세요",
+            codes: ["UNITY"]
         },
         bonusTasks: [{
-            key: "bonus-10",
+            key: "bonus-15",
             label: "보너스 미션",
             title: "영수증 인증",
-            description: "방하림 지정 미션을 수행하고 받은 보너스 QR을 입력하세요.",
+            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
             type: "code",
-            codeHint: "보너스 완료 QR 코드를 입력하세요",
-            codes: ["BONUS-10"]
+            codeHint: "완료 코드를 입력하세요",
+            codes: ["RECEIPT"]
         }]
     },
     "11": {
@@ -567,10 +567,10 @@ function buildTaskCard(taskKey, task, baseKey) {
     } else if (task.type === "code") {
         pieces.push(`
             <div class="task-input" data-key="${taskKey}">
-                <input type="text" placeholder="${task.codeHint || "완료 QR 코드를 입력하세요"}">
+                <input type="text" placeholder="${task.codeHint || "완료 코드를 입력하세요"}">
                 <button data-submit>코드 입력</button>
             </div>
-            <p class="task-hint">${task.codeHint || "현장에서 받은 완료 QR 코드를 입력하세요."}</p>
+            <p class="task-hint">${task.codeHint || "현장에서 받은 완료 코드를 입력하세요."}</p>
         `);
     } else {
         pieces.push(`<p class="muted">준비 중인 미션입니다.</p>`);
