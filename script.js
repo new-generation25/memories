@@ -176,7 +176,7 @@ const missionPages = {
 
 '예쁜 사진 찍어주기'
 
-여기 능소화 고택이에요.
+여기는 마당이 예쁜집 이에요.
 
 어렸을 때 아버지가 여기서 사진 찍자고 하셨어요.
 "아빠가 제일 좋아하는 꽃이야"라고 하시면서요.
@@ -198,7 +198,7 @@ const missionPages = {
             key: "main-3",
             label: "메인 미션",
             title: "대표 포토존",
-            question: "능소화 골목에서 피는 대표 꽃은 무엇일까요?",
+            question: "포토존 골목에서 피는 대표 꽃은 무엇일까요?",
             type: "text",
             answer: "능소화"
         },
@@ -206,7 +206,7 @@ const missionPages = {
             key: "bonus-7",
             label: "보너스 미션",
             title: "꽃 이름",
-            question: "봉황동의 유명한 능소화 포토존 앞에도 꽃이 있습니다. 그 꽃집의 이름은?",
+            question: "봉황동의 유명한 ㅇㅇㅇ 포토존 앞에도 꽃이 있습니다. 그 꽃집의 이름은?",
             type: "text",
             answer: "아르모니"
         }]

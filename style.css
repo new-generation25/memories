@@ -82,6 +82,20 @@ a {
     opacity: 0.9;
 }
 
+.hero-visual {
+    margin-top: 18px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.hero-visual img {
+    width: 100%;
+    display: block;
+    height: auto;
+}
+
 .eyebrow {
     font-size: 12px;
     letter-spacing: 0.2em;
