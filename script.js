@@ -759,7 +759,7 @@ function showMilestonePopup(threshold) {
     const messageMap = {
         5: "랜덤뽑기 1회 기회 획득!",
         10: "랜덤뽑기 2회 기회 획득!",
-        15: "랜덤뽑기 3회 기회 획득!"
+        15: "랜덤뽑기 3회 기회 획득! 축하합니다. 최종 목적지(방하림)에서 보상을 수령하세요."
     };
     const text = messageMap[threshold];
     if (!text) return;
