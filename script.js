@@ -1,6 +1,7 @@
 const APP_KEY = 'bonghwang_memories_v2';
 const ADMIN_PASSWORD = '1935';
 const ADMIN_SESSION_KEY = 'bonghwang_admin_access';
+const MISSION_MILESTONES = [5, 10, 15];
 const typingSpeed = 25;
 let progressBannerEl = null;
 
@@ -63,6 +64,7 @@ const missionPages = {
         location: "공원반점 앞",
         meta: ["PAGE 2", "보너스"],
         story: `공원방점의 주방장 사장님은 시인이세요. 마을에서 다양한 문학활동도 하시지요.공원반점 벽면에는 시가 적혀있어요.
+        
         빨간색 신호등. 
         풀린 신발끈. 
         길냥이. 
@@ -382,11 +384,13 @@ function setNickname(name) {
         state.players[clean] = {
             nickname: clean,
             createdAt: new Date().toISOString(),
-            completions: {}
+            completions: {},
+            milestones: {}
         };
     }
     saveState(state);
     updateGlobalProgressBanner();
+    checkMilestones(clean);
     return true;
 }
 
@@ -402,7 +406,8 @@ function recordCompletion(pageId, taskKey, detail) {
         state.players[nickname] = {
             nickname,
             createdAt: new Date().toISOString(),
-            completions: {}
+            completions: {},
+            milestones: {}
         };
     }
     const player = state.players[nickname];
@@ -415,6 +420,7 @@ function recordCompletion(pageId, taskKey, detail) {
     };
     saveState(state);
     updateGlobalProgressBanner();
+    checkMilestones(nickname);
 }
 
 function getCompletion(pageId, taskKey) {
@@ -439,7 +445,7 @@ function getProgressCounts(nickname) {
     const state = loadState();
     const player = state.players[nickname];
     if (!player || !player.completions) {
-        return { main: 0, bonus: 0 };
+        return { main: 0, bonus: 0, total: 0 };
     }
     let main = 0;
     let bonus = 0;
@@ -449,7 +455,7 @@ function getProgressCounts(nickname) {
             else if (key.startsWith("bonus")) bonus += 1;
         });
     });
-    return { main, bonus };
+    return { main, bonus, total: main + bonus };
 }
 
 function renderGlobalProgressBanner() {
@@ -474,6 +480,7 @@ function updateGlobalProgressBanner() {
         <span class="progress-name">${nickname}</span>
         <span>메인미션 ${counts.main}개</span>
         <span>보너스미션 ${counts.bonus}개</span>
+        <span>총 ${counts.total}개</span>
     `;
 }
 
@@ -720,6 +727,48 @@ function shouldLockMainMission(pageId) {
     if (!prevMission?.mainTask) return false;
     const prevKey = prevMission.mainTask.key || "main";
     return !getCompletion(prevId, prevKey);
+}
+
+function checkMilestones(nickname) {
+    if (!nickname) return;
+    const state = loadState();
+    const player = state.players[nickname];
+    if (!player) return;
+    if (!player.milestones) {
+        player.milestones = {};
+    }
+    const counts = getProgressCounts(nickname);
+    let updated = false;
+    MISSION_MILESTONES.forEach(threshold => {
+        if (counts.total >= threshold && !player.milestones[threshold]) {
+            player.milestones[threshold] = true;
+            showMilestonePopup(threshold);
+            updated = true;
+        }
+    });
+    if (updated) {
+        state.players[nickname] = player;
+        saveState(state);
+    }
+}
+
+function showMilestonePopup(threshold) {
+    const messageMap = {
+        5: "랜덤뽑기 1회 기회 획득!",
+        10: "랜덤뽑기 2회 기회 획득!",
+        15: "랜덤뽑기 3회 기회 획득!"
+    };
+    const text = messageMap[threshold];
+    if (!text) return;
+    const toast = document.createElement("div");
+    toast.className = "milestone-toast";
+    toast.textContent = text;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add("visible"));
+    setTimeout(() => {
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 400);
+    }, 3500);
 }
 
 function goToIntro() {
