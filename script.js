@@ -1,7 +1,9 @@
 // 미션 데이터
 const missionsData = {
+    // 메인미션 1: 체험(유료) - QR 촬영
     1: {
-        title: "엄마와의 러브스토리",
+        type: "main",
+        title: "풍선초 키링 만들기",
         location: "봉황1935",
         code: "BH001",
         story: `안녕하세요, 여러분.
@@ -29,21 +31,18 @@ const missionsData = {
 
 이것을 들고 "이게 내 마음이오"라고 하셨대요.
 
-지금 봉황1935 바깥에는 이것 천지에요. 
+지금 봉황1935 바깥에는 이것 천지에요.
 빵빵하게 부풀려진 이것, 안에는 그당시 아버지의 마음이 담겨 있었데요.
 
 그 안에 비밀이 숨어있답니다.`,
-        mission: "카페 밖에서 풍선초 씨앗이 어떤 모양인지 확인하세요.",
-        missionQuestion: "풍선초 씨앗은 어떤 모양일까요?", // 메인 미션 질문
-        missionAnswer: "하트", // 메인 미션 정답
-        bonus: {
-            type: "text", // 주관식 입력 형식
-            question: "봉황 1935 카페 안에는 피아노가 있습니다. 피아노 위에는 누가 쓰는 모자가 있습니다. 누가 쓰는 모자일까요?",
-            answer: "인디언 추장" // 정답
-        }
+        mission: "마음을 담은 키링을 만들어보세요.",
+        completionType: "qr", // 완료QR 촬영
+        format: "체험(유료)"
     },
+    // 메인미션 2: 퀴즈(주관식)
     2: {
-        title: "목욕탕에서 같이 때밀기",
+        type: "main",
+        title: "아 이맛은?",
         location: "미야상회",
         code: "BH002",
         story: `두 번째 소원이에요.
@@ -66,23 +65,17 @@ const missionsData = {
 
 아버지가 목욕탕에서 오시는 길에 매번 사오시던 게 뭘까요?
 한번 찾아보세요.`,
-        mission: "상회에서 아버지가 매주 사오시던 것을 찾으세요.",
-        missionQuestion: "아버지가 목욕탕에서 오시는 길에 매번 사오시던 것은?",
+        mission: "아버지가 목욕탕에 들렀다가 꼭 사오는 이것은 무엇일까요?",
+        completionType: "quiz",
+        missionQuestion: "아버지가 목욕탕에 들렀다가 꼭 사오는 이것은 무엇일까요?",
         missionAnswer: "바나나맛 우유",
-        bonus: {
-            question: "빙그레 ㅇㅇㅇㅇ ㅇㅇ의 출시 연도는?",
-            options: [
-                "1970년",
-                "1974년",
-                "1980년",
-                "1988년"
-            ],
-            answer: 1
-        }
+        format: "퀴즈"
     },
+    // 메인미션 3: 퀴즈(주관식)
     3: {
-        title: "예쁜 사진 찍어주기",
-        location: "능소화 고택",
+        type: "main",
+        title: "봉리단길 대표 포토존",
+        location: "능소화 포토존",
         code: "BH003",
         story: `세 번째 소원이에요.
 
@@ -105,21 +98,17 @@ const missionsData = {
 계속 기다리셨을 거예요.
 
 여러분, 여기서 사진 한 장 찍어주실래요?`,
-        mission: "능소화 담벼락 앞에서 사진을 촬영하세요.",
-        bonus: {
-            question: "능소화의 꽃말은?",
-            options: [
-                "평화와 안정",
-                "희망과 용기",
-                "명예와 성공",
-                "영원한 사랑"
-            ],
-            answer: 2
-        }
+        mission: "봉리단길의 유명 포토존이 여럿 있지만 여름에 핫한 꽃이 피는 이곳 이 꽃의 이름은?",
+        completionType: "quiz",
+        missionQuestion: "봉리단길의 유명 포토존이 여럿 있지만 여름에 핫한 꽃이 피는 이곳 이 꽃의 이름은?",
+        missionAnswer: "능소화",
+        format: "퀴즈"
     },
+    // 메인미션 4: 체험(무료) - QR 촬영
     4: {
-        title: "좋아하는 음악 함께 듣기",
-        location: "카페 탱자",
+        type: "main",
+        title: "별이 빛나는 봉황동 밤에",
+        location: "탱자",
         code: "BH004",
         story: `네 번째 소원이에요.
 
@@ -146,20 +135,14 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
 이런 마음이셨구나.
 
 지금이라도 알게 되어 다행이에요.`,
-        mission: "별밤 라디오를 들으며 아버지의 마음을 느껴보세요.",
-        bonus: {
-            question: "아버지가 신청한 노래는?",
-            options: [
-                "김광석 - 이등병의 편지",
-                "이문세 - 소녀",
-                "조용필 - 킬리만자로의 표범",
-                "신승훈 - 보이지 않는 사랑"
-            ],
-            answer: 1
-        }
+        mission: "봉황동의 DJ에게 사연과 함께 노래를 신청하세요",
+        completionType: "qr", // 완료QR 촬영
+        format: "체험(무료)"
     },
+    // 메인미션 5: 체험(무료) - QR 촬영
     5: {
-        title: "가족오락관에 나가기",
+        type: "main",
+        title: "가족오락관",
         location: "방하림",
         code: "BH005",
         story: `마지막 소원이에요.
@@ -197,17 +180,167 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
 
 여러분...
 여기까지 함께해주셔서 정말 고마워요.`,
-        mission: "MC와 함께 가족오락관 게임에 참여하세요.",
-        bonus: {
-            question: "'봉황 메모리즈'의 시작 연도는?",
-            options: [
-                "1980년",
-                "1985년",
-                "1988년",
-                "1990년"
-            ],
-            answer: 2
-        }
+        mission: "가족오락관이 한참 진행중입니다. 게임에 참여하세요",
+        completionType: "qr", // 완료QR 촬영
+        format: "체험(무료)"
+    },
+    // 보너스미션 6: 체험(유료) - QR 촬영
+    6: {
+        type: "bonus",
+        title: "부모님 전상서",
+        location: "탱자",
+        code: "BH006",
+        story: `그리운 누군가, 보고 싶은 누군가가 있나요?
+
+그분께 편지를 써보는 건 어떨까요?
+
+마음속에 담아두었던 이야기,
+미처 전하지 못했던 말들을
+
+여기, 이 자리에서 편지로 남겨보세요.`,
+        mission: "그리운 누군가, 보고 싶은 누군가에게 편지를 써보세요.",
+        completionType: "qr",
+        format: "체험(유료)"
+    },
+    // 보너스미션 7: 퀴즈(주관식)
+    7: {
+        type: "bonus",
+        title: "맛난다 맛나",
+        location: "패총쉼터",
+        code: "BH007",
+        story: `김해 부원동은 고기 좋아하는 사람들의 천국이에요.
+
+특히 한 가지 고기로 유명한 거리가 있답니다.
+
+김해에서만 맛볼 수 있는 특별한 이 고기,
+과연 무엇일까요?`,
+        mission: "김해 부원동는 고기집들이 모여 ㅇㅇㅇ거리가 있습니다. 김해에서 유명한 이 고기는 무엇을까요?",
+        completionType: "quiz",
+        missionQuestion: "김해 부원동는 고기집들이 모여 ㅇㅇㅇ거리가 있습니다. 김해에서 유명한 이 고기는 무엇을까요?",
+        missionAnswer: "뒷고기",
+        format: "퀴즈"
+    },
+    // 보너스미션 8: 퀴즈(주관식)
+    8: {
+        type: "bonus",
+        title: "출시년도 퀴즈",
+        location: "미야상회",
+        code: "BH008",
+        story: `바나나맛 우유, 누구나 한 번쯤은 마셔봤을 거예요.
+
+그런데 이 우유가 언제부터 우리 곁에 있었는지 아시나요?
+
+세월이 흘러도 변하지 않는 그 맛,
+그 시작은 언제였을까요?`,
+        mission: "바나나맛 우유의 출시년도는",
+        completionType: "quiz",
+        missionQuestion: "바나나맛 우유의 출시년도는",
+        missionAnswer: "1974",
+        format: "퀴즈"
+    },
+    // 보너스미션 9: 퀴즈(주관식)
+    9: {
+        type: "bonus",
+        title: "꽃과 함께",
+        location: "능소화 포토존",
+        code: "BH009",
+        story: `능소화 포토존 앞에는 예쁜 꽃집이 있어요.
+
+사계절 내내 아름다운 꽃들로 가득한 이곳,
+꽃집의 이름이 궁금하지 않으세요?`,
+        mission: "봉황동의 유명한 능소화 포토존 앞에도 꽃이 있습니다. 꽃집의 이름은?",
+        completionType: "quiz",
+        missionQuestion: "봉황동의 유명한 능소화 포토존 앞에도 꽃이 있습니다. 꽃집의 이름은?",
+        missionAnswer: "아르모니",
+        format: "퀴즈"
+    },
+    // 보너스미션 10: 퀴즈(주관식)
+    10: {
+        type: "bonus",
+        title: "궁금한 것들",
+        location: "봉황1935",
+        code: "BH010",
+        story: `봉황1935 카페 안에는 오래된 피아노가 있어요.
+
+그 위에는 특별한 모자 하나가 놓여 있답니다.
+
+이 모자의 주인은 누구였을까요?`,
+        mission: "봉황1935 카페 안 피아노의 위에는 모자가 있는데, 이것은 누가 썼던 모자일까요?",
+        completionType: "quiz",
+        missionQuestion: "봉황1935 카페 안 피아노의 위에는 모자가 있는데, 이것은 누가 썼던 모자일까요?",
+        missionAnswer: "인디안 추장",
+        format: "퀴즈"
+    },
+    // 보너스미션 11: 퀴즈(주관식)
+    11: {
+        type: "bonus",
+        title: "잠깐 멈춰",
+        location: "공원반점",
+        code: "BH011",
+        story: `바쁜 일상 속에서 우리는 무엇을 놓치고 있을까요?
+
+빨간색 신호등. 풀린 신발끈. 길냥이. 들꽃. 시.
+
+이 시가 우리에게 전하는 메시지는 무엇일까요?`,
+        mission: "빨간색 신호등. 풀린 신발끈. 길냥이. 들꽃. 시.  이 시의 제목은?",
+        completionType: "quiz",
+        missionQuestion: "빨간색 신호등. 풀린 신발끈. 길냥이. 들꽃. 시.  이 시의 제목은?",
+        missionAnswer: "멈추게 하는것",
+        format: "퀴즈"
+    },
+    // 보너스미션 12: 미정
+    12: {
+        type: "bonus",
+        title: "미정",
+        location: "싹스데이",
+        code: "BH012",
+        story: `이 미션은 준비 중입니다.`,
+        mission: "준비 중입니다.",
+        completionType: "pending",
+        format: "미정"
+    },
+    // 보너스미션 13: 퀴즈(주관식)
+    13: {
+        type: "bonus",
+        title: "이건 얼마?",
+        location: "호우오우",
+        code: "BH013",
+        story: `호우오우에서는 특별한 샤브샤브를 맛볼 수 있어요.
+
+일본식 가격 표기가 재미있는 이곳,
+과연 얼마일까요?`,
+        mission: "호우오우 샤브샤브의 가격은 앤화로 얼마일까요?",
+        completionType: "quiz",
+        missionQuestion: "호우오우 샤브샤브의 가격은 앤화로 얼마일까요?",
+        missionAnswer: "1300",
+        format: "퀴즈"
+    },
+    // 보너스미션 14: 미정
+    14: {
+        type: "bonus",
+        title: "미정",
+        location: "초이블리",
+        code: "BH014",
+        story: `이 미션은 준비 중입니다.`,
+        mission: "준비 중입니다.",
+        completionType: "pending",
+        format: "미정"
+    },
+    // 보너스미션 15: 체험 - QR 촬영
+    15: {
+        type: "bonus",
+        title: "영수증 인증",
+        location: "방하림",
+        code: "BH015",
+        story: `봉리단길에서 즐거운 시간 보내셨나요?
+
+여러분이 이 거리에서 만든 추억들,
+그 흔적을 남겨주세요.
+
+마지막 보상이 기다리고 있습니다!`,
+        mission: "봉리단길에서 잘 즐기셨나요? 마지막 보상수령 지점에서 봉리단길에서 지출한 영수증을 제시하면 미션 자동완료",
+        completionType: "qr",
+        format: "사람확인"
     }
 };
 
@@ -246,15 +379,19 @@ function resetAllProgress() {
 // 진행률 업데이트
 function updateProgressBar() {
     const progress = loadProgress();
-    const percent = (progress.completed.length / 5) * 100;
+
+    // 메인 미션만 카운트 (1-5)
+    const mainMissionsCompleted = progress.completed.filter(id => id >= 1 && id <= 5).length;
+    const percent = (mainMissionsCompleted / 5) * 100;
+
     document.getElementById('progressBar').style.width = percent + '%';
-    document.getElementById('progressText').textContent = 
-        `${progress.completed.length}/5 완료`;
-    
+    document.getElementById('progressText').textContent =
+        `${mainMissionsCompleted}/5 완료`;
+
     // 미션 카드 상태 업데이트
     document.querySelectorAll('.mission-card').forEach(card => {
         const missionId = parseInt(card.dataset.mission);
-        
+
         if (progress.completed.includes(missionId)) {
             card.classList.add('completed');
             card.classList.remove('locked');
@@ -269,9 +406,9 @@ function updateProgressBar() {
             card.dataset.status = 'unlocked';
         }
     });
-    
-    // 전체 완료 체크
-    if (progress.completed.length === 5) {
+
+    // 메인 미션 전체 완료 체크 (1-5)
+    if (mainMissionsCompleted === 5) {
         showCompleteModal();
     }
 }
@@ -481,31 +618,33 @@ let isTyping = false;
 function loadMissionData(id) {
     currentMissionId = parseInt(id);
     const mission = missionsData[id];
-    
+
     if (!mission) {
         alert('잘못된 미션입니다!');
         goToHome();
         return;
     }
-    
+
     // 헤더 설정
-    document.getElementById('missionBadge').textContent = `미션 ${id}`;
+    const missionType = mission.type === 'main' ? '메인미션' : '보너스미션';
+    document.getElementById('missionBadge').textContent = `${missionType} ${id}`;
     document.getElementById('missionTitle').textContent = mission.title;
     document.getElementById('missionLocation').textContent = `📍 ${mission.location}`;
-    
+
     // 스토리 타이핑 효과
     typeStory(mission.story);
-    
+
     // 미션 설명
     document.getElementById('missionDesc').textContent = mission.mission;
-    
-    // 메인 미션 퀴즈 (정답이 있는 경우)
+
+    // 진행 상황 확인
     const progress = loadProgress();
     const missionQuizBox = document.getElementById('missionQuizBox');
     const completeBtn = document.getElementById('completeBtn');
-    
-    if (mission.missionQuestion && mission.missionAnswer) {
-        // 메인 미션이 주관식 입력 형식인 경우
+
+    // completionType에 따라 UI 분기
+    if (mission.completionType === 'quiz') {
+        // 퀴즈 형식 미션
         if (progress.completed.includes(currentMissionId)) {
             // 이미 완료된 경우
             missionQuizBox.style.display = 'none';
@@ -517,11 +656,10 @@ function loadMissionData(id) {
             missionQuizBox.style.display = 'block';
             completeBtn.style.display = 'none';
             document.getElementById('missionQuestion').textContent = mission.missionQuestion;
-            
-            // Enter 키로 제출 가능하도록 (이벤트 리스너는 한 번만 추가)
+
+            // Enter 키로 제출 가능하도록
             const missionAnswerInput = document.getElementById('missionAnswer');
             missionAnswerInput.value = ''; // 초기화
-            // placeholder에 힌트 표시 (예: "ㅇㅇㅇ ㅇㅇ")
             missionAnswerInput.placeholder = formatAnswerHint(mission.missionAnswer);
             missionAnswerInput.onkeypress = function(e) {
                 if (e.key === 'Enter') {
@@ -529,22 +667,28 @@ function loadMissionData(id) {
                 }
             };
         }
-    } else {
-        // 메인 미션이 일반 미션인 경우 (기존 방식)
+    } else if (mission.completionType === 'qr') {
+        // 체험 형식 미션 (QR 촬영)
         missionQuizBox.style.display = 'none';
         completeBtn.style.display = 'block';
         if (progress.completed.includes(currentMissionId)) {
             completeBtn.textContent = '✓ 완료됨';
             completeBtn.disabled = true;
+        } else {
+            completeBtn.textContent = '미션 완료하기';
+            completeBtn.disabled = false;
         }
+    } else if (mission.completionType === 'pending') {
+        // 준비 중인 미션
+        missionQuizBox.style.display = 'none';
+        completeBtn.style.display = 'block';
+        completeBtn.textContent = '준비 중';
+        completeBtn.disabled = true;
     }
-    
-    // 보너스 퀴즈 (보너스가 있는 경우에만)
+
+    // 보너스 섹션 숨김 (보너스 미션은 이제 별도 미션 번호로 관리)
     const bonusSection = document.getElementById('bonusSection');
-    if (mission.bonus) {
-        bonusSection.style.display = 'block';
-        loadBonus(mission.bonus);
-    } else {
+    if (bonusSection) {
         bonusSection.style.display = 'none';
     }
 }
@@ -818,19 +962,19 @@ function submitMissionAnswer() {
     const userAnswer = input.value.trim();
     const correctAnswer = mission.missionAnswer;
     const resultDiv = document.getElementById('missionResult');
-    
+
     if (!userAnswer) {
         alert('정답을 입력해주세요!');
         return;
     }
-    
+
     // 입력 필드와 버튼 비활성화
     input.disabled = true;
     const submitBtn = document.querySelector('#missionQuizBox .quiz-submit-btn');
     if (submitBtn) {
         submitBtn.disabled = true;
     }
-    
+
     // 정답 체크 (띄어쓰기 무시, 대소문자 구분 없이)
     if (compareAnswers(userAnswer, correctAnswer)) {
         input.classList.add('correct');
@@ -839,15 +983,18 @@ function submitMissionAnswer() {
                 🎉 정답입니다! 미션이 완료되었습니다!
             </div>
         `;
-        
+
         // 미션 완료 처리
         const progress = loadProgress();
         if (!progress.completed.includes(currentMissionId)) {
             progress.completed.push(currentMissionId);
-            progress.currentMission = currentMissionId + 1;
+            // 메인 미션인 경우에만 currentMission 증가
+            if (mission.type === 'main') {
+                progress.currentMission = currentMissionId + 1;
+            }
             saveProgress(progress);
         }
-        
+
         // 완료 버튼 표시
         setTimeout(() => {
             document.getElementById('missionQuizBox').style.display = 'none';
@@ -855,13 +1002,21 @@ function submitMissionAnswer() {
             completeBtn.style.display = 'block';
             completeBtn.textContent = '✓ 완료됨';
             completeBtn.disabled = true;
-            
+
             // 다음 미션 안내
-            if (currentMissionId < 5) {
-                document.getElementById('nextMission').style.display = 'block';
+            const nextMissionDiv = document.getElementById('nextMission');
+            if (mission.type === 'main' && currentMissionId < 5) {
+                // 메인 미션이고 마지막이 아닌 경우
+                if (nextMissionDiv) {
+                    nextMissionDiv.style.display = 'block';
+                }
+            } else if (mission.type === 'main' && currentMissionId === 5) {
+                // 메인 미션 마지막 완료
+                alert('🎉 모든 메인 미션을 완료하셨습니다!\n보너스 미션도 도전해보세요!');
+                goToHome();
             } else {
-                // 마지막 미션 완료
-                alert('🎉 모든 미션을 완료하셨습니다!\n방하림에서 완주 선물을 받아가세요.');
+                // 보너스 미션 완료
+                alert('🎉 보너스 미션 완료!');
                 goToHome();
             }
         }, 1500);
@@ -872,7 +1027,7 @@ function submitMissionAnswer() {
                 ❌ 정답이 아닙니다. 다시 시도해보세요.
             </div>
         `;
-        
+
         // 틀렸을 때 입력 필드 다시 활성화 (재시도 가능)
         setTimeout(() => {
             input.disabled = false;
@@ -887,31 +1042,43 @@ function submitMissionAnswer() {
     }
 }
 
-// 미션 완료 (일반 미션용 - 정답이 없는 경우)
+// 미션 완료 (체험 미션용 - QR 촬영)
 function completeMission() {
+    const mission = missionsData[currentMissionId];
     const progress = loadProgress();
-    
+
     if (progress.completed.includes(currentMissionId)) {
         alert('이미 완료한 미션입니다!');
         return;
     }
-    
+
     // 완료 처리
     progress.completed.push(currentMissionId);
-    progress.currentMission = currentMissionId + 1;
+    // 메인 미션인 경우에만 currentMission 증가
+    if (mission.type === 'main') {
+        progress.currentMission = currentMissionId + 1;
+    }
     saveProgress(progress);
-    
+
     // 버튼 비활성화
     const btn = document.getElementById('completeBtn');
     btn.textContent = '✓ 완료됨';
     btn.disabled = true;
-    
+
     // 다음 미션 안내
-    if (currentMissionId < 5) {
-        document.getElementById('nextMission').style.display = 'block';
+    const nextMissionDiv = document.getElementById('nextMission');
+    if (mission.type === 'main' && currentMissionId < 5) {
+        // 메인 미션이고 마지막이 아닌 경우
+        if (nextMissionDiv) {
+            nextMissionDiv.style.display = 'block';
+        }
+    } else if (mission.type === 'main' && currentMissionId === 5) {
+        // 메인 미션 마지막 완료
+        alert('🎉 모든 메인 미션을 완료하셨습니다!\n보너스 미션도 도전해보세요!');
+        goToHome();
     } else {
-        // 마지막 미션 완료
-        alert('🎉 모든 미션을 완료하셨습니다!\n방하림에서 완주 선물을 받아가세요.');
+        // 보너스 미션 완료
+        alert('🎉 보너스 미션 완료!');
         goToHome();
     }
 }
