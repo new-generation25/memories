@@ -3,131 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>봉황 메모리즈 - 아버지의 타임캡슐</title>
+    <title>봉황 메모리즈</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container">
-        <!-- 헤더 -->
-        <header>
-            <h1>🎭 봉황 메모리즈</h1>
-            <p class="subtitle">1988년 아버지의 타임캡슐</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressBar"></div>
-            </div>
-            <p class="progress-text" id="progressText">0/5 완료</p>
-            <button onclick="resetAllProgress()" style="margin-top: 10px; padding: 6px 12px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; opacity: 0.7;">
-                진행 상황 초기화
-            </button>
+<body data-page="index">
+    <div class="container narrow">
+        <header class="hero-card">
+            <p class="eyebrow">1988년 아버지의 타임캡슐</p>
+            <h1>봉황 메모리즈 투어</h1>
+            <p>현장 QR 코드를 스캔하면 해당 장소의 미션이 열립니다. 미션을 수행하고, 완료 QR 또는 정답을 입력해 기록을 남겨주세요.</p>
         </header>
 
-        <!-- 지도 -->
-        <section class="map-section">
-            <h2>📍 투어 지도</h2>
-            <div class="map-placeholder">
-                <div class="map-marker" data-mission="1">
-                    <span class="marker-number">1</span>
-                    <span class="marker-name">봉황1935</span>
-                </div>
-                <div class="map-marker" data-mission="2">
-                    <span class="marker-number">2</span>
-                    <span class="marker-name">미야상회</span>
-                </div>
-                <div class="map-marker" data-mission="3">
-                    <span class="marker-number">3</span>
-                    <span class="marker-name">능소화</span>
-                </div>
-                <div class="map-marker" data-mission="4">
-                    <span class="marker-number">4</span>
-                    <span class="marker-name">카페 탱자</span>
-                </div>
-                <div class="map-marker" data-mission="5">
-                    <span class="marker-number">5</span>
-                    <span class="marker-name">방하림</span>
-                </div>
+        <section class="card">
+            <h2>1. 닉네임 등록</h2>
+            <p>처음 방문하면 닉네임을 입력하세요. 모든 미션 기록은 이 닉네임으로 저장됩니다.</p>
+            <div class="form-row">
+                <input type="text" id="nicknameInput" placeholder="예: 봉황탐험가">
+                <button id="nicknameButton">닉네임 저장</button>
             </div>
-            <p class="map-guide">💡 각 장소의 QR 코드를 스캔하세요</p>
+            <p id="nicknameStatus" class="muted"></p>
         </section>
 
-        <!-- 미션 리스트 -->
-        <section class="mission-list">
-            <h2>📋 아버지의 위시리스트</h2>
-            
-            <div class="mission-card" data-status="unlocked" data-mission="1">
-                <div class="mission-header">
-                    <span class="mission-number">1</span>
-                    <h3>엄마와의 러브스토리</h3>
-                </div>
-                <p class="mission-location">📍 봉황1935</p>
-                <p class="mission-desc">풍선초의 비밀을 찾아라</p>
-                <button class="btn-scan" onclick="openScanner(1)">QR 스캔하기</button>
-            </div>
-
-            <div class="mission-card locked" data-status="locked" data-mission="2">
-                <div class="mission-header">
-                    <span class="mission-number">2</span>
-                    <h3>목욕탕에서 같이 때밀기</h3>
-                </div>
-                <p class="mission-location">📍 미야상회</p>
-                <p class="mission-desc">바나나우유의 약속</p>
-                <div class="lock-icon">🔒</div>
-            </div>
-
-            <div class="mission-card locked" data-status="locked" data-mission="3">
-                <div class="mission-header">
-                    <span class="mission-number">3</span>
-                    <h3>예쁜 사진 찍어주기</h3>
-                </div>
-                <p class="mission-location">📍 능소화 고택</p>
-                <p class="mission-desc">마지막 남은 능소화</p>
-                <div class="lock-icon">🔒</div>
-            </div>
-
-            <div class="mission-card locked" data-status="locked" data-mission="4">
-                <div class="mission-header">
-                    <span class="mission-number">4</span>
-                    <h3>좋아하는 음악 같이 듣기</h3>
-                </div>
-                <p class="mission-location">📍 카페 탱자</p>
-                <p class="mission-desc">별밤 라디오</p>
-                <div class="lock-icon">🔒</div>
-            </div>
-
-            <div class="mission-card locked" data-status="locked" data-mission="5">
-                <div class="mission-header">
-                    <span class="mission-number">5</span>
-                    <h3>가족오락관에 나가기</h3>
-                </div>
-                <p class="mission-location">📍 방하림</p>
-                <p class="mission-desc">37년의 꿈</p>
-                <div class="lock-icon">🔒</div>
-            </div>
+        <section class="card">
+            <h2>2. 진행 방법</h2>
+            <ol class="steps">
+                <li>현장에 비치된 QR 코드를 스캔하면 <strong>mission.html?id=번호</strong> 페이지가 열립니다.</li>
+                <li>페이지에서 스토리를 읽고 메인/보너스 미션을 확인합니다.</li>
+                <li>미션 유형은 <strong>주관식 정답 입력</strong> 또는 <strong>완료 QR 코드 입력</strong> 두 가지입니다.</li>
+                <li>사람이 확인하는 미션은 스태프에게 검증 받은 뒤 제공되는 완료 QR 코드를 입력하면 됩니다.</li>
+            </ol>
         </section>
 
-        <!-- QR 스캔 모달 -->
-        <div id="scannerModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeScanner()">&times;</span>
-                <h3>QR 코드 스캔</h3>
-                <div id="qrReader"></div>
-                <p class="scan-guide">또는 직접 입력:</p>
-                <input type="text" id="manualCode" placeholder="미션 코드 입력 (예: BH001)">
-                <button onclick="submitCode()">확인</button>
-            </div>
-        </div>
+        <section class="card">
+            <h2>3. QR 안내</h2>
+            <ul class="bullets">
+                <li>모든 QR 코드는 단일 페이지와 연결됩니다. 다른 장치로도 동일한 URL을 사용할 수 있습니다.</li>
+                <li>Mission ID는 현장 안내판에 적혀 있습니다. 필요하면 주소창에 직접 <code>?id=번호</code>를 입력하세요.</li>
+                <li>완료 QR 코드 값은 대/소문자·띄어쓰기와 관계없이 자동 판별됩니다.</li>
+            </ul>
+        </section>
 
-        <!-- 완주 축하 -->
-        <div id="completeModal" class="modal">
-            <div class="modal-content celebration">
-                <h2>🎉 축하합니다!</h2>
-                <p>모든 미션을 완료하셨습니다!</p>
-                <p>방하림에서 완주 선물을 받아가세요.</p>
-                <button onclick="location.reload()">처음으로</button>
+        <section class="card">
+            <h2>관리 도구</h2>
+            <div class="actions">
+                <a class="link-button" href="admin.html">관리자 페이지</a>
+                <button id="resetAppButton" class="ghost">모든 데이터 초기화</button>
             </div>
-        </div>
+            <p class="muted">관리자 페이지에서는 닉네임별 완료 현황을 확인할 수 있습니다. 본 장치에 저장된 데이터만 표시됩니다.</p>
+        </section>
     </div>
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="script.js"></script>
 </body>
 </html>

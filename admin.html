@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>봉황 메모리즈 관리자</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="admin">
+    <div class="container wide">
+        <header class="hero-card">
+            <p class="eyebrow">Admin</p>
+            <h1>미션 완료 현황</h1>
+            <p>이 페이지는 현재 기기(LocalStorage)에 저장된 참여자 기록을 요약합니다.</p>
+        </header>
+
+        <section class="card">
+            <div class="admin-actions">
+                <button id="exportButton">JSON 다운로드</button>
+                <button id="clearDataButton" class="ghost">모든 기록 삭제</button>
+                <a class="link-button" href="index.html">← 안내 페이지</a>
+            </div>
+            <div id="adminSummary" class="muted"></div>
+            <div class="table-wrapper">
+                <table id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>닉네임</th>
+                            <th>등록일</th>
+                            <th>완료 미션</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="muted">기록을 불러오는 중...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

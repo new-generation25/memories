@@ -1,924 +1,527 @@
-// 미션 데이터
-const missionsData = {
-    1: {
-        title: "엄마와의 러브스토리",
+const APP_KEY = 'bonghwang_memories_v2';
+const typingSpeed = 25;
+
+const missionPages = {
+    "1": {
+        id: "1",
+        title: "봉황1935의 시작",
         location: "봉황1935",
-        code: "BH001",
-        story: `안녕하세요, 여러분.
-저는 강소영이라고 합니다.
+        meta: ["PAGE 1", "메인 & 보너스"],
+        story: `안녕하세요, 저는 강소영이에요.
 
-이거 보이시죠?
-1988년 9월 17일, 제가 태어난 날 아버지가 쓰신 메모예요.
+봉황1935에 오면 항상 1988년으로 시간이 거슬러 올라가죠.
+아버지가 엄마에게 풍선초를 건네며 고백하던 순간,
+"이게 내 마음이오"라고 말하셨대요.
 
-'아이와 함께 하고 싶은 것들'
-
-37년이 지났는데... 하나도 못 하셨어요.
-
-왜냐면 제가... 19년 전에 고향을 떠났거든요.
-아버지가 무뚝뚝하다는 이유로.
-
-근데 이번에 내려와 보니 아버지가 건망증이 심해지셨어요.
-
-이상하게 1988년, 제가 태어났을 때 이야기만은
-잊고 싶지 않으신가 봐요.
-
-첫 번째 소원은 '엄마와의 러브스토리 들려주기'
-
-여기 봉황1935, 37년 전엔 '봉황다방'이었대요.
-아버지가 엄마에게 고백한 장소죠.
-
-이것을 들고 "이게 내 마음이오"라고 하셨대요.
-
-지금 봉황1935 바깥에는 이것 천지에요. 
-빵빵하게 부풀려진 이것, 안에는 그당시 아버지의 마음이 담겨 있었데요.
-
-그 안에 비밀이 숨어있답니다.`,
-        mission: "카페 밖에서 풍선초 씨앗이 어떤 모양인지 확인하세요.",
-        missionQuestion: "풍선초 씨앗은 어떤 모양일까요?", // 메인 미션 질문
-        missionAnswer: "하트", // 메인 미션 정답
-        bonus: {
-            type: "text", // 주관식 입력 형식
-            question: "봉황 1935 카페 안에는 피아노가 있습니다. 피아노 위에는 누가 쓰는 모자가 있습니다. 누가 쓰는 모자일까요?",
-            answer: "인디언 추장" // 정답
+아버지는 기억을 잃어 가면서도 이 장면만은 잊고 싶지 않으신가 봐요.
+여기서 다시 마음을 이어 붙여주세요.`,
+        mainTask: {
+            label: "메인 미션",
+            title: "풍선초 키링 만들기",
+            description: "현장에서 키링을 완성한 뒤 스태프에게 완료 QR 코드를 받아 입력하세요.",
+            type: "code",
+            codeHint: "완료 QR 코드를 입력하세요",
+            codes: ["BH001-DONE", "KEYRING"]
+        },
+        bonusTask: {
+            label: "보너스 미션",
+            title: "궁금한 장식",
+            question: "카페 중앙 천장에 걸린, 악몽을 막아준다는 장식의 이름은 무엇일까요?",
+            type: "text",
+            answer: "드림캐처"
         }
     },
-    2: {
-        title: "목욕탕에서 같이 때밀기",
+    "2": {
+        id: "2",
+        title: "공원반점 쉼표",
+        location: "공원반점 앞",
+        meta: ["PAGE 2", "보너스"],
+        story: `봉황동 골목을 걷다 보면 공원반점 앞 의자가 눈에 띄어요.
+의자 옆에는 빨간 신발과 파란 신발 그림, 그리고 짧은 시 한 구절이 붙어 있답니다.
+
+잠깐 멈춰 서서 시인의 마음을 읽어주세요.`,
+        bonusTask: {
+            label: "보너스 미션",
+            title: "시의 제목",
+            question: "공원반점 앞에 붙어 있는 시의 제목은 무엇일까요?",
+            type: "text",
+            answer: "잠깐 멈춰"
+        }
+    },
+    "3": {
+        id: "3",
+        title: "씩스데이 골목",
+        location: "씩스데이",
+        meta: ["PAGE 3", "보너스"],
+        story: `큼지막한 제주 감귤 상자가 쌓인 듯한 씩스데이는 지역 청년들이 만든 팝업 스토어예요.
+현장 안내판에는 제주 오름의 이름이 적혀 있죠. 그중 하나를 찾아주세요.`,
+        bonusTask: {
+            label: "보너스 미션",
+            title: "여기 제주도?",
+            question: "안내판에 적힌 제주 명칭 중 '벚꽃이 가장 많이 피는 제주도의 이름'은 무엇일까요?",
+            type: "text",
+            answer: "큰샘의오름"
+        }
+    },
+    "4": {
+        id: "4",
+        title: "패홍쉘터의 오후",
+        location: "패홍쉘터",
+        meta: ["PAGE 4", "보너스"],
+        story: `패홍쉘터 벽면에는 김해 사람들이 사랑한 돼지고기 부위 소개가 붙어 있어요.
+그중 하나는 오직 이 동네에서만 특별하게 불린답니다.`,
+        bonusTask: {
+            label: "보너스 미션",
+            title: "맛난다 맛나",
+            question: "패홍쉘터 안내판에 적힌 김해 대표 돼지고기 부위는 무엇일까요?",
+            type: "text",
+            answer: "뒷고기"
+        }
+    },
+    "5": {
+        id: "5",
+        title: "미야상회의 약속",
         location: "미야상회",
-        code: "BH002",
-        story: `두 번째 소원이에요.
-
-'목욕탕에서 같이 때밀기'
-
-사실 이건 좀 슬픈 이야기예요.
-
-아버지는 아들을 원하셨대요.
-근데 제가 딸로 태어났죠.
-
-7살까지는 같이 목욕탕 갔는데
-그 이후론 못 갔어요.
-
-대신에...
-매주 일요일마다 여기 미야상회에 들러서
-제가 좋아하는 걸 사오셨대요.
-
-상회 사장님이 그 모습을 다 기억하세요.
-
-아버지가 목욕탕에서 오시는 길에 매번 사오시던 게 뭘까요?
-한번 찾아보세요.`,
-        mission: "상회에서 아버지가 매주 사오시던 것을 찾으세요.",
-        missionQuestion: "아버지가 목욕탕에서 오시는 길에 매번 사오시던 것은?",
-        missionAnswer: "바나나맛 우유",
-        bonus: {
+        meta: ["PAGE 5", "메인 & 보너스"],
+        story: `미야상회 냉장고에는 매주 일요일이면 비어 있는 칸이 있어요.
+아버지가 목욕탕에서 돌아오는 길마다 사오던 그 음료 때문이죠.
+사장님은 여전히 그 빈자리를 지켜보고 계세요.`,
+        mainTask: {
+            label: "메인 미션",
+            title: "이 맛은?",
+            question: "아버지가 목욕탕에서 오실 때마다 사 오신 음료는 무엇일까요?",
+            type: "text",
+            answer: "바나나맛 우유"
+        },
+        bonusTask: {
+            label: "보너스 미션",
+            title: "출시년도 퀴즈",
             question: "빙그레 ㅇㅇㅇㅇ ㅇㅇ의 출시 연도는?",
-            options: [
-                "1970년",
-                "1974년",
-                "1980년",
-                "1988년"
-            ],
-            answer: 1
+            type: "text",
+            answer: "1974"
         }
     },
-    3: {
-        title: "예쁜 사진 찍어주기",
-        location: "능소화 고택",
-        code: "BH003",
-        story: `세 번째 소원이에요.
-
-'예쁜 사진 찍어주기'
-
-여기 능소화 고택이에요.
-
-어렸을 때 아버지가 여기서 사진 찍자고 하셨어요.
-"아빠가 제일 좋아하는 꽃이야"라고 하시면서요.
-
-능소화는 여름에 피는 꽃인데
-지금은 꽃이 없네요.
-
-예전엔 봉황동 곳곳에 있었는데,
-이제는 몇 집 남지 않았대요.
-
-저와 아버지가 같이 찍은 사진이 없는 게 아쉬워요.
-
-아버지는 제와 함께 사진 찍기를
-계속 기다리셨을 거예요.
-
-여러분, 여기서 사진 한 장 찍어주실래요?`,
-        mission: "능소화 담벼락 앞에서 사진을 촬영하세요.",
-        bonus: {
-            question: "능소화의 꽃말은?",
-            options: [
-                "평화와 안정",
-                "희망과 용기",
-                "명예와 성공",
-                "영원한 사랑"
-            ],
-            answer: 2
+    "7": {
+        id: "7",
+        title: "능소화 포토존",
+        location: "능소화 골목",
+        meta: ["PAGE 7", "메인 & 보너스"],
+        story: `능소화 담장이 이어진 골목에서 아버지는 늘 사진을 찍자고 하셨죠.
+꽃이 없어도 여러분의 웃음이 색을 채워 줄 거예요.`,
+        mainTask: {
+            label: "메인 미션",
+            title: "대표 포토존",
+            question: "능소화 골목에서 피는 대표 꽃은 무엇일까요?",
+            type: "text",
+            answer: "능소화"
+        },
+        bonusTask: {
+            label: "보너스 미션",
+            title: "꽃 이름",
+            question: "담장 안쪽 화분에 심어진 하얀 꽃의 이름은 무엇일까요? (힌트: 프랑스어 이름)",
+            type: "text",
+            answer: "아르모니"
         }
     },
-    4: {
-        title: "좋아하는 음악 함께 듣기",
+    "8": {
+        id: "8",
+        title: "호유오우의 가격표",
+        location: "호유오우",
+        meta: ["PAGE 8", "보너스"],
+        story: `사바나 소품이 가득한 호유오우에는 오래된 전화기 모형이 있어요.
+가격표 글자가 지워져 있는데 사장님이 살짝 알려주셨어요.`,
+        bonusTask: {
+            label: "보너스 미션",
+            title: "이건 얼마?",
+            question: "사바나 전화기 모형의 가격은 얼마일까요?",
+            type: "text",
+            answer: "1300"
+        }
+    },
+    "9": {
+        id: "9",
+        title: "카페 탱자의 밤",
         location: "카페 탱자",
-        code: "BH004",
-        story: `네 번째 소원이에요.
-
-'내가 좋아하는 음악 함께 듣기'
-
-아버지는 음악을 정말 좋아하셨어요.
-1980년대 가요, 팝송...
-
-근데 집에선 항상 작게 들으셨어요.
-제가 '시끄럽다'고 할까봐.
-
-여기 카페 탱자, 예전엔 음악다방이었대요.
-
-DJ분이 오래된 신청곡 쪽지를 발견했대요.
-
-아버지가 저를 생각하며 신청한 노래.
-
-"딸아이가 여섯 살입니다.
-말재주가 없어서 사랑한다는 말을 못했습니다.
-소영아, 듣고 있니?
-아빠는 네가 웃을 때가 제일 행복하단다."
-
-무뚝뚝하기만 했던 아버지...
-이런 마음이셨구나.
-
-지금이라도 알게 되어 다행이에요.`,
-        mission: "별밤 라디오를 들으며 아버지의 마음을 느껴보세요.",
-        bonus: {
-            question: "아버지가 신청한 노래는?",
-            options: [
-                "김광석 - 이등병의 편지",
-                "이문세 - 소녀",
-                "조용필 - 킬리만자로의 표범",
-                "신승훈 - 보이지 않는 사랑"
-            ],
-            answer: 1
+        meta: ["PAGE 9", "메인 & 보너스"],
+        story: `별밤 라디오 부스가 남겨진 카페 탱자에서는 지금도 DJ가 사연을 읽어줘요.
+사연을 남기면 특별한 완료 QR을 받을 수 있답니다.`,
+        mainTask: {
+            label: "메인 미션",
+            title: "별이 빛나는 봉황동",
+            description: "라디오 부스에서 사연을 남기고 스태프에게 완료 QR 코드를 받아 입력하세요.",
+            type: "code",
+            codeHint: "완료 QR 코드를 입력하세요",
+            codes: ["BH004-DONE", "STAR-NIGHT"]
+        },
+        bonusTask: {
+            label: "보너스 미션",
+            title: "벌밤지기",
+            question: "탱자에 전시된 라디오 기록 중 '별이 빛나는 밤에'를 오랫동안 진행한 DJ는 누구일까요?",
+            type: "text",
+            answer: "이문세"
         }
     },
-    5: {
-        title: "가족오락관에 나가기",
+    "10": {
+        id: "10",
+        title: "방하림의 무대",
         location: "방하림",
-        code: "BH005",
-        story: `마지막 소원이에요.
-
-'가족오락관에 같이 나가기'
-
-아버지가 평생 보고 싶어 하셨던 프로그램이에요.
-
-매주 일요일 저녁,
-혼자 중얼거리셨대요.
-"나도 저기 나가면 잘할 수 있을 텐데..."
-
-근데 한 번도 도전하지 못하셨어요.
-
-왜냐면 '가족'오락관이잖아요.
-제가 같이 안 해드렸거든요.
-
-그런데 MC분이 저를 기다리고 계셨어요.
-
-"아버님이 한 달 전에 부탁하셨어요.
-소영이가 이날 올 테니 마지막 소원을 이뤄주세요."
-
-한 달 동안...
-아버지가 이 모든 걸 준비하셨어요.
-
-오늘의 모든 일들이 우연이 아니었어요.
-
-아버지의 편지가 있어요.
-
-"소영아, 다섯 가지 소원 모두 이뤘니?
-네가 올까 안 올까 매일 불안했지만, 믿었어.
-가족오락관에서 웃는 모습, 상상만 해도 행복했어.
-이제 아빠의 소원은 다 이뤄졌어.
-고마워, 소영아. 사랑한다."
-
-여러분...
-여기까지 함께해주셔서 정말 고마워요.`,
-        mission: "MC와 함께 가족오락관 게임에 참여하세요.",
-        bonus: {
-            question: "'봉황 메모리즈'의 시작 연도는?",
-            options: [
-                "1980년",
-                "1985년",
-                "1988년",
-                "1990년"
-            ],
-            answer: 2
+        meta: ["PAGE 10", "메인 & 보너스"],
+        story: `방하림에서는 지금도 작은 가족오락관 무대가 열립니다.
+무대 옆 탁자에는 우승팀에게만 공개되는 QR 카드가 숨겨져 있어요.`,
+        mainTask: {
+            label: "메인 미션",
+            title: "가족오락관 게임",
+            description: "현장 게임을 마친 뒤 제공받은 완료 QR 코드를 입력하세요.",
+            type: "code",
+            codeHint: "완료 QR 코드를 입력하세요",
+            codes: ["BH005-DONE", "FAMILY"]
+        },
+        bonusTask: {
+            label: "보너스 미션",
+            title: "영수증 인증",
+            description: "방하림 지정 미션을 수행하고 받은 보너스 QR을 입력하세요.",
+            type: "code",
+            codeHint: "보너스 완료 QR 코드를 입력하세요",
+            codes: ["BONUS-10"]
+        }
+    },
+    "11": {
+        id: "11",
+        title: "초입길의 기록",
+        location: "초입길",
+        meta: ["PAGE 11", "보너스"],
+        story: `초입길 아카이브에는 1980년대 별밤 사연이 빼곡히 남아 있어요.
+마지막 장에는 “초입길 사장님이 직접 적어주세요”라는 문장이 적혀 있죠.`,
+        bonusTask: {
+            label: "보너스 미션",
+            title: "누가 썼을까?",
+            question: "초입길 사장님이 남긴 메시지에서 '별밤 DJ'로 언급된 인물은 누구일까요?",
+            type: "text",
+            answer: "초입길 사장님"
         }
     }
 };
 
-// 로컬 스토리지 키
-const STORAGE_KEY = 'bonghwangMemories';
+const defaultState = () => ({
+    currentNickname: "",
+    players: {}
+});
 
-// 진행 상황 불러오기
-function loadProgress() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-        return JSON.parse(saved);
+function loadState() {
+    try {
+        const raw = localStorage.getItem(APP_KEY);
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        return {
+            currentNickname: parsed.currentNickname || "",
+            players: parsed.players || {}
+        };
+    } catch {
+        return defaultState();
     }
-    return {
-        completed: [],
-        bonusCompleted: [],
-        currentMission: 1
+}
+
+function saveState(state) {
+    localStorage.setItem(APP_KEY, JSON.stringify(state));
+}
+
+function normalizeNickname(name) {
+    return name.trim().replace(/\s+/g, " ");
+}
+
+function setNickname(name) {
+    const clean = normalizeNickname(name);
+    if (!clean) return false;
+    const state = loadState();
+    state.currentNickname = clean;
+    if (!state.players[clean]) {
+        state.players[clean] = {
+            nickname: clean,
+            createdAt: new Date().toISOString(),
+            completions: {}
+        };
+    }
+    saveState(state);
+    return true;
+}
+
+function getCurrentNickname() {
+    return loadState().currentNickname;
+}
+
+function recordCompletion(pageId, taskKey, detail) {
+    const state = loadState();
+    const nickname = state.currentNickname;
+    if (!nickname) return;
+    if (!state.players[nickname]) {
+        state.players[nickname] = {
+            nickname,
+            createdAt: new Date().toISOString(),
+            completions: {}
+        };
+    }
+    const player = state.players[nickname];
+    if (!player.completions[pageId]) {
+        player.completions[pageId] = {};
+    }
+    player.completions[pageId][taskKey] = {
+        ...detail,
+        completedAt: new Date().toISOString()
     };
+    saveState(state);
 }
 
-// 진행 상황 저장
-function saveProgress(progress) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+function getCompletion(pageId, taskKey) {
+    const state = loadState();
+    const nickname = state.currentNickname;
+    if (!nickname) return null;
+    const player = state.players[nickname];
+    if (!player) return null;
+    return player.completions?.[pageId]?.[taskKey] || null;
 }
 
-// 전체 진행 상황 초기화
-function resetAllProgress() {
-    if (!confirm('모든 진행 상황을 초기화하시겠습니까?\n(완료한 미션과 보너스 미션이 모두 삭제됩니다)')) {
-        return;
-    }
-    
-    localStorage.removeItem(STORAGE_KEY);
-    alert('진행 상황이 초기화되었습니다!');
-    location.reload();
+function normalizeInput(value) {
+    return value.replace(/\s+/g, "").replace(/[^\w가-힣]/g, "").toLowerCase().trim();
 }
 
-// 진행률 업데이트
-function updateProgressBar() {
-    const progress = loadProgress();
-    const percent = (progress.completed.length / 5) * 100;
-    document.getElementById('progressBar').style.width = percent + '%';
-    document.getElementById('progressText').textContent = 
-        `${progress.completed.length}/5 완료`;
-    
-    // 미션 카드 상태 업데이트
-    document.querySelectorAll('.mission-card').forEach(card => {
-        const missionId = parseInt(card.dataset.mission);
-        
-        if (progress.completed.includes(missionId)) {
-            card.classList.add('completed');
-            card.classList.remove('locked');
-            card.dataset.status = 'completed';
-            const btn = card.querySelector('.btn-scan');
-            if (btn) {
-                btn.textContent = '✓ 완료';
-                btn.style.background = '#4CAF50';
-            }
-        } else if (missionId <= progress.currentMission) {
-            card.classList.remove('locked');
-            card.dataset.status = 'unlocked';
-        }
-    });
-    
-    // 전체 완료 체크
-    if (progress.completed.length === 5) {
-        showCompleteModal();
-    }
+function compareAnswers(userAnswer, correctAnswer) {
+    if (!userAnswer || !correctAnswer) return false;
+    return normalizeInput(userAnswer) === normalizeInput(correctAnswer);
 }
 
-// QR 스캐너 관련 변수
-let html5QrCode;
-let isScanning = true;
-
-// QR 스캐너 열기
-function openScanner(missionId) {
-    const progress = loadProgress();
-    
-    // 잠금 체크
-    if (missionId > progress.currentMission) {
-        alert('이전 미션을 먼저 완료해주세요!');
-        return;
-    }
-    
-    isScanning = true; // 스캔 플래그 초기화
-    document.getElementById('scannerModal').style.display = 'block';
-    
-    // QR 스캐너 초기화
-    if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("qrReader");
-    }
-    
-    html5QrCode.start(
-        { facingMode: "environment" },
-        {
-            fps: 10,
-            qrbox: { width: 250, height: 250 }
-        },
-        onScanSuccess,
-        onScanFailure
-    ).catch(err => {
-        console.error("QR 스캐너 오류:", err);
-    });
+function formatAnswerHint(answer) {
+    if (!answer) return "정답을 입력하세요";
+    return answer.split(/\s+/).map(word => "ㅇ".repeat(word.length)).join(" ");
 }
 
-// QR 스캔 성공
-function onScanSuccess(decodedText) {
-    if (!isScanning) return; // 중복 호출 방지
-    
-    isScanning = false;
-    console.log('=== QR 스캔 성공 ===');
-    console.log('스캔된 값:', decodedText);
-    
-    // 스캐너를 먼저 정지
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            document.getElementById('scannerModal').style.display = 'none';
-            // 스캐너 정지 후 검증
-            setTimeout(() => {
-                validateCode(decodedText);
-            }, 100);
-        }).catch(err => {
-            console.error("스캐너 정지 오류:", err);
-            document.getElementById('scannerModal').style.display = 'none';
-            validateCode(decodedText);
-        });
-    } else {
-        validateCode(decodedText);
-    }
-}
+/* Intro page -------------------------------------------------- */
 
-// QR 스캔 실패 (무시)
-function onScanFailure(error) {
-    // 스캔 실패는 무시
-}
+function initIntroPage() {
+    const nicknameInput = document.getElementById("nicknameInput");
+    const nicknameButton = document.getElementById("nicknameButton");
+    const status = document.getElementById("nicknameStatus");
+    const resetButton = document.getElementById("resetAppButton");
 
-// 스캐너 닫기
-function closeScanner() {
-    isScanning = false; // 스캔 중지
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            document.getElementById('scannerModal').style.display = 'none';
-        }).catch(err => {
-            console.error("스캐너 정지 오류:", err);
-            document.getElementById('scannerModal').style.display = 'none';
-        });
-    } else {
-        document.getElementById('scannerModal').style.display = 'none';
+    const state = loadState();
+    if (state.currentNickname) {
+        nicknameInput.value = state.currentNickname;
+        status.textContent = `현재 참여자: ${state.currentNickname}`;
     }
-}
 
-// 수동 코드 입력
-function submitCode() {
-    const code = document.getElementById('manualCode').value.trim();
-    validateCode(code);
-}
-
-// 코드 검증
-function validateCode(code) {
-    if (!code) {
-        alert('QR 코드 값이 비어있습니다!');
-        return;
-    }
-    
-    // 공백 및 개행 문자 제거
-    code = String(code).trim();
-    console.log('=== 코드 검증 시작 ===');
-    console.log('원본 코드:', code);
-    console.log('코드 길이:', code.length);
-    
-    // 단축 URL 감지 (qrco.de 등) - 가장 먼저 체크!
-    if (code.includes('qrco.de') || code.includes('bit.ly') || code.includes('tinyurl') || 
-        code.includes('goo.gl') || code.includes('short') || 
-        (code.startsWith('http') && code.length < 50)) {
-        
-        console.log('단축 URL 감지! 브라우저가 자동으로 리다이렉트합니다:', code);
-        // 단축 URL은 브라우저가 자동으로 최종 URL로 리다이렉트하므로
-        // 그냥 이동시키면 됩니다. 최종 URL에서 mission.html이 처리할 것입니다.
-        window.location.href = code;
-        return;
-    }
-    
-    // 방법 1: URL에서 ID 추출 (가장 관대하게)
-    if (code.includes('mission') || code.includes('Mission') || code.includes('MISSION')) {
-        const patterns = [
-            /id=(\d+)/i,           // id=1
-            /id:(\d+)/i,           // id:1
-            /mission[\/\\]?(\d+)/i, // mission/1, mission1
-            /(\d+)$/               // 끝에 숫자만
-        ];
-        
-        for (const pattern of patterns) {
-            const match = code.match(pattern);
-            if (match && match[1]) {
-                const id = match[1];
-                console.log('패턴 매칭 성공:', pattern, '-> ID:', id);
-                if (missionsData[id]) {
-                    console.log('✓ 미션 찾음! 이동:', id);
-                    window.location.href = `mission.html?id=${id}`;
-                    return;
-                }
-            }
-        }
-    }
-    
-    // 방법 2: 순수 숫자만 있는 경우 (1, 2, 3, 4, 5)
-    if (/^\d+$/.test(code)) {
-        const id = code;
-        console.log('순수 숫자 감지:', id);
-        if (missionsData[id]) {
-            console.log('✓ 미션 찾음! 이동:', id);
-            window.location.href = `mission.html?id=${id}`;
-            return;
-        }
-    }
-    
-    // 방법 3: BH001 형식
-    const upperCode = code.toUpperCase();
-    for (const id in missionsData) {
-        if (missionsData[id].code === upperCode) {
-            console.log('✓ BH 코드 매칭! 이동:', id);
-            window.location.href = `mission.html?id=${id}`;
-            return;
-        }
-    }
-    
-    // 방법 4: BH 제거하고 숫자만 추출
-    const bhMatch = code.match(/BH0*(\d+)/i);
-    if (bhMatch && bhMatch[1]) {
-        const id = bhMatch[1];
-        console.log('BH 코드에서 숫자 추출:', id);
-        if (missionsData[id]) {
-            console.log('✓ 미션 찾음! 이동:', id);
-            window.location.href = `mission.html?id=${id}`;
-            return;
-        }
-    }
-    
-    // 방법 5: HTTP/HTTPS URL인 경우 직접 리다이렉트
-    if (code.startsWith('http://') || code.startsWith('https://')) {
-        console.log('HTTP/HTTPS URL 감지, 직접 리다이렉트');
-        window.location.href = code;
-        return;
-    }
-    
-    // 모든 시도 실패
-    console.error('❌ 모든 패턴 매칭 실패');
-    console.error('코드:', code);
-    console.error('타입:', typeof code);
-    alert('올바른 QR 코드가 아닙니다!\n\n스캔된 값:\n' + code + '\n\n길이: ' + code.length + '\n\n형식: BH001 또는\nhttps://도메인/mission.html?id=1');
-}
-
-// 완주 모달
-function showCompleteModal() {
-    document.getElementById('completeModal').style.display = 'block';
-}
-
-// 뒤로가기
-function goBack() {
-    window.history.back();
-}
-
-// 홈으로 가기
-function goToHome() {
-    window.location.href = 'index.html';
-}
-
-// 미션 데이터 로드 (mission.html)
-let currentMissionId;
-let typingTimeout;
-let isTyping = false;
-
-function loadMissionData(id) {
-    currentMissionId = parseInt(id);
-    const mission = missionsData[id];
-    
-    if (!mission) {
-        alert('잘못된 미션입니다!');
-        goToHome();
-        return;
-    }
-    
-    // 헤더 설정
-    document.getElementById('missionBadge').textContent = `미션 ${id}`;
-    document.getElementById('missionTitle').textContent = mission.title;
-    document.getElementById('missionLocation').textContent = `📍 ${mission.location}`;
-    
-    // 스토리 타이핑 효과
-    typeStory(mission.story);
-    
-    // 미션 설명
-    document.getElementById('missionDesc').textContent = mission.mission;
-    
-    // 메인 미션 퀴즈 (정답이 있는 경우)
-    const progress = loadProgress();
-    const missionQuizBox = document.getElementById('missionQuizBox');
-    const completeBtn = document.getElementById('completeBtn');
-    
-    if (mission.missionQuestion && mission.missionAnswer) {
-        // 메인 미션이 주관식 입력 형식인 경우
-        if (progress.completed.includes(currentMissionId)) {
-            // 이미 완료된 경우
-            missionQuizBox.style.display = 'none';
-            completeBtn.style.display = 'block';
-            completeBtn.textContent = '✓ 완료됨';
-            completeBtn.disabled = true;
+    nicknameButton?.addEventListener("click", () => {
+        if (setNickname(nicknameInput.value)) {
+            status.textContent = `현재 참여자: ${normalizeNickname(nicknameInput.value)}`;
+            alert("닉네임을 저장했습니다!");
         } else {
-            // 미완료인 경우 입력 필드 표시
-            missionQuizBox.style.display = 'block';
-            completeBtn.style.display = 'none';
-            document.getElementById('missionQuestion').textContent = mission.missionQuestion;
-            
-            // Enter 키로 제출 가능하도록 (이벤트 리스너는 한 번만 추가)
-            const missionAnswerInput = document.getElementById('missionAnswer');
-            missionAnswerInput.value = ''; // 초기화
-            // placeholder에 힌트 표시 (예: "ㅇㅇㅇ ㅇㅇ")
-            missionAnswerInput.placeholder = formatAnswerHint(mission.missionAnswer);
-            missionAnswerInput.onkeypress = function(e) {
-                if (e.key === 'Enter') {
-                    submitMissionAnswer();
-                }
-            };
+            alert("닉네임을 입력해주세요.");
         }
-    } else {
-        // 메인 미션이 일반 미션인 경우 (기존 방식)
-        missionQuizBox.style.display = 'none';
-        completeBtn.style.display = 'block';
-        if (progress.completed.includes(currentMissionId)) {
-            completeBtn.textContent = '✓ 완료됨';
-            completeBtn.disabled = true;
+    });
+
+    resetButton?.addEventListener("click", () => {
+        if (confirm("정말 모든 데이터를 삭제할까요?")) {
+            localStorage.removeItem(APP_KEY);
+            alert("데이터를 초기화했습니다.");
+            location.reload();
         }
-    }
-    
-    // 보너스 퀴즈 (보너스가 있는 경우에만)
-    const bonusSection = document.getElementById('bonusSection');
-    if (mission.bonus) {
-        bonusSection.style.display = 'block';
-        loadBonus(mission.bonus);
-    } else {
-        bonusSection.style.display = 'none';
-    }
+    });
 }
 
-// 타이핑 효과
+/* Mission page -------------------------------------------------- */
+
+let currentMission = null;
+let typingTimer;
+
+function initMissionPage() {
+    const params = new URLSearchParams(window.location.search);
+    const pageId = params.get("id");
+    currentMission = missionPages[pageId];
+
+    if (!currentMission) {
+        alert("등록되지 않은 미션 페이지입니다.");
+        window.location.href = "index.html";
+        return;
+    }
+
+    document.getElementById("missionBadge").textContent = `PAGE ${pageId}`;
+    document.getElementById("missionTitle").textContent = currentMission.title;
+    document.getElementById("missionLocation").textContent = `📍 ${currentMission.location}`;
+    document.getElementById("missionMeta").textContent = currentMission.meta?.join(" · ") || "";
+
+    const skipBtn = document.getElementById("skipBtn");
+    skipBtn?.addEventListener("click", () => {
+        clearTimeout(typingTimer);
+        document.getElementById("storyBox").textContent = currentMission.story;
+        skipBtn.style.display = "none";
+    });
+
+    typeStory(currentMission.story);
+    renderTask("mainTask", "main", currentMission.mainTask);
+    renderTask("bonusTask", "bonus", currentMission.bonusTask);
+}
+
 function typeStory(text) {
-    const storyBox = document.getElementById('storyBox');
-    storyBox.textContent = '';
-    isTyping = true;
-    
+    const storyBox = document.getElementById("storyBox");
+    storyBox.textContent = "";
     let index = 0;
-    const speed = 50; // 50ms per character
-    
+
     function type() {
-        if (index < text.length && isTyping) {
+        if (index < text.length) {
             storyBox.textContent += text.charAt(index);
-            index++;
-            storyBox.scrollTop = storyBox.scrollHeight; // 자동 스크롤
-            typingTimeout = setTimeout(type, speed);
+            index += 1;
+            storyBox.scrollTop = storyBox.scrollHeight;
+            typingTimer = setTimeout(type, typingSpeed);
         } else {
-            isTyping = false;
-            document.getElementById('skipBtn').style.display = 'none';
+            document.getElementById("skipBtn").style.display = "none";
         }
     }
-    
+
     type();
 }
 
-// 스킵
-function skipTyping() {
-    isTyping = false;
-    clearTimeout(typingTimeout);
-    const mission = missionsData[currentMissionId];
-    document.getElementById('storyBox').textContent = mission.story;
-    document.getElementById('skipBtn').style.display = 'none';
+function renderTask(containerId, taskKey, task) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (!task) {
+        container.style.display = "none";
+        return;
+    }
+    container.style.display = "block";
+
+    const record = getCompletion(currentMission.id, taskKey);
+    const completed = !!record;
+
+    const header = `
+        <div class="task-type">${task.label || (taskKey === "main" ? "메인 미션" : "보너스 미션")}</div>
+        <h3>${task.title || ""}</h3>
+        ${task.description ? `<p class="task-desc">${task.description}</p>` : ""}
+        ${task.question ? `<p class="task-desc"><strong>질문</strong> · ${task.question}</p>` : ""}
+    `;
+
+    let body = "";
+    if (completed) {
+        body = `<div class="task-status success">✓ 완료됨 · ${new Date(record.completedAt).toLocaleString()}</div>`;
+    } else if (task.type === "text") {
+        body = `
+            <div class="task-input" data-task="${taskKey}">
+                <input type="text" placeholder="${formatAnswerHint(task.answer)}">
+                <button data-submit="${taskKey}">제출</button>
+            </div>
+        `;
+    } else if (task.type === "code") {
+        body = `
+            <div class="task-input" data-task="${taskKey}">
+                <input type="text" placeholder="${task.codeHint || "완료 QR 코드를 입력하세요"}">
+                <button data-submit="${taskKey}">코드 입력</button>
+            </div>
+            <p class="task-hint">${task.codeHint || "현장 스태프에게서 받은 코드를 입력하세요."}</p>
+        `;
+    } else {
+        body = `<p class="muted">준비 중인 미션입니다.</p>`;
+    }
+
+    container.innerHTML = header + body;
+
+    if (!completed) {
+        const submitBtn = container.querySelector(`button[data-submit="${taskKey}"]`);
+        submitBtn?.addEventListener("click", () => handleTaskSubmit(taskKey, task));
+    }
 }
 
-// 보너스 퀴즈 로드
-function loadBonus(bonus) {
-    if (!bonus) {
-        return; // 보너스가 없으면 처리하지 않음
+function handleTaskSubmit(taskKey, task) {
+    const nickname = getCurrentNickname();
+    if (!nickname) {
+        alert("먼저 안내 페이지에서 닉네임을 등록해주세요!");
+        return;
     }
-    
-    const quizBox = document.getElementById('quizBox');
-    
-    const progress = loadProgress();
-    if (progress.bonusCompleted.includes(currentMissionId)) {
-        // 주관식 형식인 경우 다시 풀 수 있도록 "다시 풀기" 버튼 제공
-        if (bonus.type === "text") {
-            quizBox.innerHTML = `
-                <div class="quiz-result correct" style="margin: 0; padding: 15px; text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 15px;">
-                    ✓ 완료됨
-                </div>
-                <button onclick="resetBonusMission()" class="quiz-reset-btn" style="width: 100%; padding: 12px; background: #D4722B; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px;">
-                    다시 풀기
-                </button>
-            `;
+
+    const wrapper = document.querySelector(`[data-task="${taskKey}"]`);
+    if (!wrapper) return;
+
+    const input = wrapper.querySelector("input");
+    const value = input?.value.trim();
+    if (!value) {
+        alert("값을 입력해주세요.");
+        return;
+    }
+
+    if (task.type === "text") {
+        if (!compareAnswers(value, task.answer)) {
+            alert("정답이 아닙니다. 다시 시도해보세요.");
             return;
         }
-        // 선택형은 완료 상태 유지 (메인 미션과 동일한 형식)
-        quizBox.innerHTML = `
-            <div class="quiz-result correct" style="margin: 0; padding: 15px; text-align: center; font-weight: bold; font-size: 18px;">
-                ✓ 완료됨
-            </div>
-        `;
-        return;
+        recordCompletion(currentMission.id, taskKey, { method: "text", value });
+    } else if (task.type === "code") {
+        const normalized = normalizeInput(value);
+        const match = task.codes?.some(code => normalizeInput(code) === normalized);
+        if (!match) {
+            alert("코드가 올바르지 않습니다.");
+            return;
+        }
+        recordCompletion(currentMission.id, taskKey, { method: "code", value });
     }
-    
-    // 주관식 입력 형식인 경우
-    if (bonus.type === "text") {
-        // placeholder에 힌트 표시 (예: "ㅇㅇㅇ ㅇㅇ")
-        const answerHint = formatAnswerHint(bonus.answer);
-        let html = `
-            <div class="quiz-question">${bonus.question}</div>
-            <div class="quiz-text-input">
-                <input type="text" id="quizTextAnswer" placeholder="${answerHint}" class="quiz-input">
-                <button onclick="submitTextAnswer()" class="quiz-submit-btn">제출</button>
-            </div>
-            <div id="quizResult"></div>
-        `;
-        quizBox.innerHTML = html;
-        
-        // Enter 키로 제출 가능하도록
-        document.getElementById('quizTextAnswer').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                submitTextAnswer();
-            }
-        });
-        return;
-    }
-    
-    // 선택형 퀴즈 (기존 방식)
-    let html = `
-        <div class="quiz-question">${bonus.question}</div>
-        <div class="quiz-options">
-    `;
-    
-    bonus.options.forEach((option, index) => {
-        html += `
-            <div class="quiz-option" onclick="selectOption(${index})">
-                ${index + 1}. ${option}
-            </div>
-        `;
-    });
-    
-    html += `
-        </div>
-        <div id="quizResult"></div>
-    `;
-    
-    quizBox.innerHTML = html;
+
+    renderTask(taskKey === "main" ? "mainTask" : "bonusTask", taskKey, task);
 }
 
-// 주관식 답변 제출
-function submitTextAnswer() {
-    const mission = missionsData[currentMissionId];
-    const input = document.getElementById('quizTextAnswer');
-    const userAnswer = input.value.trim();
-    const correctAnswer = mission.bonus.answer;
-    const resultDiv = document.getElementById('quizResult');
-    
-    if (!userAnswer) {
-        alert('정답을 입력해주세요!');
-        return;
-    }
-    
-    // 입력 필드와 버튼 비활성화
-    input.disabled = true;
-    const submitBtn = document.querySelector('.quiz-submit-btn');
-    if (submitBtn) {
-        submitBtn.disabled = true;
-    }
-    
-    // 정답 체크 (띄어쓰기 무시, 대소문자 구분 없이)
-    if (compareAnswers(userAnswer, correctAnswer)) {
-        input.classList.add('correct');
-        resultDiv.innerHTML = `
-            <div class="quiz-result correct">
-                🎉 정답입니다!
-            </div>
-        `;
-        
-        // 보너스 완료 저장
-        const progress = loadProgress();
-        if (!progress.bonusCompleted.includes(currentMissionId)) {
-            progress.bonusCompleted.push(currentMissionId);
-            saveProgress(progress);
-        }
-        
-        // 입력 필드 숨기고 완료 상태 표시 (메인 미션과 동일한 형식)
-        setTimeout(() => {
-            const quizBox = document.getElementById('quizBox');
-            quizBox.innerHTML = `
-                <div class="quiz-result correct" style="margin: 0; padding: 15px; text-align: center; font-weight: bold; font-size: 18px;">
-                    ✓ 완료됨
-                </div>
+function goToIntro() {
+    window.location.href = "index.html";
+}
+
+/* Admin page -------------------------------------------------- */
+
+function initAdminPage() {
+    const state = loadState();
+    const tableBody = document.querySelector("#adminTable tbody");
+    const summary = document.getElementById("adminSummary");
+    const exportBtn = document.getElementById("exportButton");
+    const clearBtn = document.getElementById("clearDataButton");
+
+    const players = Object.values(state.players);
+    if (!players.length) {
+        tableBody.innerHTML = `<tr><td colspan="3" class="muted">저장된 기록이 없습니다.</td></tr>`;
+        summary.textContent = "참여 기록이 없습니다.";
+    } else {
+        tableBody.innerHTML = players.map(player => {
+            const completedList = Object.entries(player.completions || {}).flatMap(([pageId, tasks]) => {
+                return Object.entries(tasks).map(([taskKey, record]) => `${pageId}-${taskKey} (${new Date(record.completedAt).toLocaleDateString()})`);
+            });
+            return `
+                <tr>
+                    <td><strong>${player.nickname}</strong></td>
+                    <td>${new Date(player.createdAt).toLocaleDateString()}</td>
+                    <td>${completedList.length ? completedList.join("<br>") : "<span class='muted'>미완료</span>"}</td>
+                </tr>
             `;
-        }, 1500);
-    } else {
-        input.classList.add('wrong');
-        resultDiv.innerHTML = `
-            <div class="quiz-result wrong">
-                ❌ 정답이 아닙니다. 다시 시도해보세요.
-            </div>
-        `;
-        
-        // 틀렸을 때 입력 필드 다시 활성화 (재시도 가능)
-        setTimeout(() => {
-            input.disabled = false;
-            input.classList.remove('wrong');
-            input.value = '';
-            input.focus();
-            if (submitBtn) {
-                submitBtn.disabled = false;
-            }
-            resultDiv.innerHTML = ''; // 오류 메시지 제거
-        }, 2000);
-    }
-}
+        }).join("");
 
-// 퀴즈 선택 (선택형)
-function selectOption(index) {
-    const mission = missionsData[currentMissionId];
-    const options = document.querySelectorAll('.quiz-option');
-    
-    // 모든 옵션 클릭 비활성화
-    options.forEach(opt => opt.style.pointerEvents = 'none');
-    
-    // 선택한 옵션 표시
-    options[index].classList.add('selected');
-    
-    // 정답 체크
-    const resultDiv = document.getElementById('quizResult');
-    if (index === mission.bonus.answer) {
-        options[index].classList.add('correct');
-        resultDiv.innerHTML = `
-            <div class="quiz-result correct">
-                🎉 정답입니다! 보너스 포인트 획득!
-            </div>
-        `;
-        
-        // 보너스 완료 저장
-        const progress = loadProgress();
-        if (!progress.bonusCompleted.includes(currentMissionId)) {
-            progress.bonusCompleted.push(currentMissionId);
-            saveProgress(progress);
-        }
-    } else {
-        options[index].classList.add('wrong');
-        options[mission.bonus.answer].classList.add('correct');
-        resultDiv.innerHTML = `
-            <div class="quiz-result wrong">
-                ❌ 아쉽습니다. 정답은 ${mission.bonus.answer + 1}번입니다.
-            </div>
-        `;
+        summary.textContent = `총 ${players.length}명의 기록이 저장되어 있습니다.`;
     }
-}
 
-// 보너스 미션 초기화
-function resetBonusMission() {
-    if (!confirm('보너스 미션을 다시 풀겠습니까?')) {
-        return;
-    }
-    
-    const progress = loadProgress();
-    const index = progress.bonusCompleted.indexOf(currentMissionId);
-    if (index > -1) {
-        progress.bonusCompleted.splice(index, 1);
-        saveProgress(progress);
-    }
-    
-    // 보너스 퀴즈 다시 로드
-    const mission = missionsData[currentMissionId];
-    loadBonus(mission.bonus);
-}
-
-// 정답을 placeholder 형식으로 변환 (예: "인디언 추장" -> "ㅇㅇㅇ ㅇㅇ")
-function formatAnswerHint(answer) {
-    if (!answer) return "정답을 입력하세요";
-    
-    // 단어별로 분리하여 각 단어를 ㅇ으로 변환
-    const words = answer.split(/\s+/);
-    return words.map(word => 'ㅇ'.repeat(word.length)).join(' ');
-}
-
-// 정답 비교 함수 (띄어쓰기 무시, 대소문자 구분 없이)
-function compareAnswers(userAnswer, correctAnswer) {
-    if (!userAnswer || !correctAnswer) {
-        return false;
-    }
-    
-    // 띄어쓰기와 특수문자 제거하고 소문자로 변환하여 비교
-    const normalizedUser = userAnswer.replace(/\s+/g, '').replace(/[^\w가-힣]/g, '').toLowerCase().trim();
-    const normalizedCorrect = correctAnswer.replace(/\s+/g, '').replace(/[^\w가-힣]/g, '').toLowerCase().trim();
-    
-    console.log('정답 비교:', {
-        사용자입력: userAnswer,
-        정답: correctAnswer,
-        정규화된사용자입력: normalizedUser,
-        정규화된정답: normalizedCorrect,
-        일치: normalizedUser === normalizedCorrect
+    exportBtn?.addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "bonghwang-memories-data.json";
+        a.click();
+        URL.revokeObjectURL(url);
     });
-    
-    return normalizedUser === normalizedCorrect;
-}
 
-// 메인 미션 정답 제출
-function submitMissionAnswer() {
-    const mission = missionsData[currentMissionId];
-    const input = document.getElementById('missionAnswer');
-    const userAnswer = input.value.trim();
-    const correctAnswer = mission.missionAnswer;
-    const resultDiv = document.getElementById('missionResult');
-    
-    if (!userAnswer) {
-        alert('정답을 입력해주세요!');
-        return;
-    }
-    
-    // 입력 필드와 버튼 비활성화
-    input.disabled = true;
-    const submitBtn = document.querySelector('#missionQuizBox .quiz-submit-btn');
-    if (submitBtn) {
-        submitBtn.disabled = true;
-    }
-    
-    // 정답 체크 (띄어쓰기 무시, 대소문자 구분 없이)
-    if (compareAnswers(userAnswer, correctAnswer)) {
-        input.classList.add('correct');
-        resultDiv.innerHTML = `
-            <div class="quiz-result correct">
-                🎉 정답입니다! 미션이 완료되었습니다!
-            </div>
-        `;
-        
-        // 미션 완료 처리
-        const progress = loadProgress();
-        if (!progress.completed.includes(currentMissionId)) {
-            progress.completed.push(currentMissionId);
-            progress.currentMission = currentMissionId + 1;
-            saveProgress(progress);
+    clearBtn?.addEventListener("click", () => {
+        if (confirm("모든 기록을 삭제할까요? (되돌릴 수 없습니다)")) {
+            localStorage.removeItem(APP_KEY);
+            alert("삭제했습니다.");
+            location.reload();
         }
-        
-        // 완료 버튼 표시
-        setTimeout(() => {
-            document.getElementById('missionQuizBox').style.display = 'none';
-            const completeBtn = document.getElementById('completeBtn');
-            completeBtn.style.display = 'block';
-            completeBtn.textContent = '✓ 완료됨';
-            completeBtn.disabled = true;
-            
-            // 다음 미션 안내
-            if (currentMissionId < 5) {
-                document.getElementById('nextMission').style.display = 'block';
-            } else {
-                // 마지막 미션 완료
-                alert('🎉 모든 미션을 완료하셨습니다!\n방하림에서 완주 선물을 받아가세요.');
-                goToHome();
-            }
-        }, 1500);
-    } else {
-        input.classList.add('wrong');
-        resultDiv.innerHTML = `
-            <div class="quiz-result wrong">
-                ❌ 정답이 아닙니다. 다시 시도해보세요.
-            </div>
-        `;
-        
-        // 틀렸을 때 입력 필드 다시 활성화 (재시도 가능)
-        setTimeout(() => {
-            input.disabled = false;
-            input.classList.remove('wrong');
-            input.value = '';
-            input.focus();
-            if (submitBtn) {
-                submitBtn.disabled = false;
-            }
-            resultDiv.innerHTML = ''; // 오류 메시지 제거
-        }, 2000);
-    }
+    });
 }
 
-// 미션 완료 (일반 미션용 - 정답이 없는 경우)
-function completeMission() {
-    const progress = loadProgress();
-    
-    if (progress.completed.includes(currentMissionId)) {
-        alert('이미 완료한 미션입니다!');
-        return;
-    }
-    
-    // 완료 처리
-    progress.completed.push(currentMissionId);
-    progress.currentMission = currentMissionId + 1;
-    saveProgress(progress);
-    
-    // 버튼 비활성화
-    const btn = document.getElementById('completeBtn');
-    btn.textContent = '✓ 완료됨';
-    btn.disabled = true;
-    
-    // 다음 미션 안내
-    if (currentMissionId < 5) {
-        document.getElementById('nextMission').style.display = 'block';
-    } else {
-        // 마지막 미션 완료
-        alert('🎉 모든 미션을 완료하셨습니다!\n방하림에서 완주 선물을 받아가세요.');
-        goToHome();
-    }
-}
+/* Entry point -------------------------------------------------- */
 
-// 페이지 로드 시
-if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-    window.onload = function() {
-        updateProgressBar();
-    };
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const page = document.body.dataset.page || "index";
+    if (page === "index") initIntroPage();
+    if (page === "mission") initMissionPage();
+    if (page === "admin") initAdminPage();
+});
+
