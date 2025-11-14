@@ -59,7 +59,7 @@ const missionPages = {
     },
     "2": {
         id: "2",
-        title: "공원반점 쉼표",
+        title: "공원반점의 쉼",
         location: "공원반점 앞",
         meta: ["PAGE 2", "보너스"],
         story: `공원방점의 주방장 사장님은 시인이세요. 마을에서 다양한 문학활동도 하시지요.공원반점 벽면에는 시가 적혀있어요.
@@ -79,8 +79,8 @@ const missionPages = {
     },
     "3": {
         id: "3",
-        title: "씩스데이 골목",
-        location: "씩스데이",
+        title: "싹스데이 골목",
+        location: "싹스데이",
         meta: ["PAGE 3", "보너스"],
         story: `싹스데이는 여러 종류의 양말을 판매하고 있습니다. 그중에서 특색있는 양말을 찾아보세요.`,
         bonusTasks: [{
@@ -94,8 +94,8 @@ const missionPages = {
     },
     "4": {
         id: "4",
-        title: "패홍쉼터의 오후",
-        location: "패홍쉼터",
+        title: "패총쉼터의 오후",
+        location: "패총쉼터",
         meta: ["PAGE 4", "보너스"],
         story: `패총쉼터는 오래 전부터 마을 분들의 쉼터 역할을 했습니다.
 그리고 김해에서 유명한 그것을 홍보하기 위한 표지판에 새로 세워졌어요.`,
@@ -345,6 +345,8 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
     }
 };
 
+const mainMissionOrder = ["1", "5", "7", "9", "10"];
+
 const defaultState = () => ({
     currentNickname: "",
     players: {}
@@ -518,12 +520,14 @@ function initIntroPage() {
 let currentMission = null;
 let typingTimer;
 let completionToken = null;
+let mainMissionLocked = false;
 
 function initMissionPage() {
     const params = new URLSearchParams(window.location.search);
     const pageId = params.get("id");
     completionToken = params.get("token");
     currentMission = missionPages[pageId];
+    mainMissionLocked = shouldLockMainMission(pageId);
 
     if (!currentMission) {
         alert("등록되지 않은 미션 페이지입니다.");
@@ -537,13 +541,24 @@ function initMissionPage() {
     document.getElementById("missionMeta").textContent = currentMission.meta?.join(" · ") || "";
 
     const skipBtn = document.getElementById("skipBtn");
-    skipBtn?.addEventListener("click", () => {
-        clearTimeout(typingTimer);
-        document.getElementById("storyBox").textContent = currentMission.story;
-        skipBtn.style.display = "none";
-    });
-
-    typeStory(currentMission.story);
+    const storyBox = document.getElementById("storyBox");
+    if (mainMissionLocked) {
+        if (storyBox) {
+            storyBox.textContent = "메인미션은 1단계부터 순서대로 진행해주세요.";
+            storyBox.classList.add("story-locked");
+        }
+        skipBtn?.style.setProperty("display", "none");
+    } else {
+        storyBox?.classList.remove("story-locked");
+        skipBtn?.addEventListener("click", () => {
+            clearTimeout(typingTimer);
+            if (storyBox) {
+                storyBox.textContent = currentMission.story;
+            }
+            skipBtn.style.display = "none";
+        });
+        typeStory(currentMission.story);
+    }
     renderTasks("mainTask", "main", currentMission.mainTask);
     renderTasks("bonusTask", "bonus", currentMission.bonusTasks);
 }
@@ -575,7 +590,22 @@ function renderTasks(sectionId, baseKey, taskData) {
         section.style.display = "none";
         return;
     }
+    const isMainSection = baseKey === "main";
     const tasks = Array.isArray(taskData) ? taskData : [taskData];
+    if (!tasks.length) {
+        section.style.display = "none";
+        return;
+    }
+    if (isMainSection && mainMissionLocked) {
+        section.style.display = "block";
+        section.innerHTML = `
+            <article class="task-block task-main locked">
+                <div class="task-type is-main">메인 미션</div>
+                <p class="task-desc">메인미션은 1단계부터 시작하세요.</p>
+            </article>
+        `;
+        return;
+    }
     section.style.display = "block";
     tasks.forEach((task, index) => {
         const key = task.key || (tasks.length === 1 ? baseKey : `${baseKey}-${index + 1}`);
@@ -586,14 +616,14 @@ function renderTasks(sectionId, baseKey, taskData) {
 
 function buildTaskCard(taskKey, task, baseKey) {
     const wrapper = document.createElement("article");
-    wrapper.className = "task-block";
+    wrapper.className = `task-block ${baseKey === "main" ? "task-main" : "task-bonus"}`;
     let record = getCompletion(currentMission.id, taskKey);
     if (!record) {
         record = tryCompleteWithToken(taskKey, task);
     }
 
     const pieces = [];
-    pieces.push(`<div class="task-type">${task.label || (baseKey === "main" ? "메인 미션" : "보너스 미션")}</div>`);
+    pieces.push(`<div class="task-type ${baseKey === "main" ? "is-main" : "is-bonus"}">${task.label || (baseKey === "main" ? "메인 미션" : "보너스 미션")}</div>`);
     if (task.title) pieces.push(`<h3>${task.title}</h3>`);
     if (task.description) pieces.push(`<p class="task-desc">${task.description}</p>`);
     if (task.question) pieces.push(`<p class="task-desc"><strong>질문</strong> · ${task.question}</p>`);
@@ -679,6 +709,18 @@ function handleTaskSubmit(taskKey, task, baseKey) {
     } else {
         renderTasks("bonusTask", "bonus", currentMission.bonusTasks);
     }
+}
+
+function shouldLockMainMission(pageId) {
+    const mission = missionPages[pageId];
+    if (!mission?.mainTask) return false;
+    const idx = mainMissionOrder.indexOf(pageId);
+    if (idx <= 0) return false;
+    const prevId = mainMissionOrder[idx - 1];
+    const prevMission = missionPages[prevId];
+    if (!prevMission?.mainTask) return false;
+    const prevKey = prevMission.mainTask.key || "main";
+    return !getCompletion(prevId, prevKey);
 }
 
 function goToIntro() {

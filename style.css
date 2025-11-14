@@ -311,6 +311,29 @@ button.small {
     margin-bottom: 6px;
 }
 
+.task-block {
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+}
+
+.task-block.task-main {
+    background: #fff5ec;
+    border-color: #e0a472;
+}
+
+.task-block.task-bonus {
+    background: #fdfaf5;
+    border-color: #d8c8b6;
+}
+
+.task-block.locked {
+    text-align: center;
+}
+
 .task-block + .task-block {
     border-top: 1px solid var(--border);
     margin-top: 14px;
@@ -327,6 +350,14 @@ button.small {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 8px;
+}
+
+.task-type.is-main {
+    color: #b95f24;
+}
+
+.task-type.is-bonus {
+    color: #766150;
 }
 
 .task-desc {
@@ -370,6 +401,12 @@ button.small {
     font-size: 13px;
     color: var(--muted);
     margin-top: 6px;
+}
+
+.story-locked {
+    text-align: center;
+    color: var(--muted);
+    font-weight: 600;
 }
 
 /* Admin table */
