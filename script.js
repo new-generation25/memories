@@ -91,7 +91,7 @@ const missionPages = {
             title: "여기는 제주도?",
             question: "'벚꽃과 유채꽃이 많은 제주도의 오름 이름은?' 정답은 이 안에 있습니다.",
             type: "text",
-            answer: "큰샘의오름"
+            answer: "큰사슴이오름"
         }]
     },
     "4": {
@@ -260,7 +260,7 @@ DJ분이 오래된 신청곡 쪽지를 발견했대요.
             key: "main-4",
             label: "메인 미션",
             title: "별이 빛나는 봉황동 밤에",
-            description: "미션을 완료하고 스태프에게 완료 코드를 받으세요.",
+            description: "DJ에게 애청곡을 신청하고 미셔완료 코드를 받으세요.",
             type: "code",
             codeHint: "완료 코드를 입력하세요",
             codes: ["STARLIGHT"]
